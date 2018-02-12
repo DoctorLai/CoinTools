@@ -21,14 +21,7 @@ Install the [CoinTools](https://chrome.google.com/webstore/detail/coin-tools/fmg
 3. Realtime Graphs
 
 ## Screenshots
-General Tab shows a few global statistics.
-![image.png](https://res.cloudinary.com/hpiynhbhq/image/upload/v1518401222/mmhutfxvijmcrwwf2nm6.png)
-
-Top 100 coins
-![image.png](https://res.cloudinary.com/hpiynhbhq/image/upload/v1518401235/hxjqxksg2xlqhbbukrtq.png)
-
-Select your preferred currency (FIAT)
-![image.png](https://res.cloudinary.com/hpiynhbhq/image/upload/v1518401242/o1yxv4l17mzmmjjlxbyo.png)
-
-Log tab.
-![image.png](https://res.cloudinary.com/hpiynhbhq/image/upload/v1518401249/ruwhw0zcvugqdmb5ywg8.png)
+![General](https://github.com/DoctorLai/CoinTools/blob/master/images/general.jpg?raw=true)
+![Log](https://github.com/DoctorLai/CoinTools/blob/master/images/log.jpg?raw=true)
+![Ranking](https://github.com/DoctorLai/CoinTools/blob/master/images/rank.jpg?raw=true)
+![Setting](https://github.com/DoctorLai/CoinTools/blob/master/images/setting.jpg?raw=true)
