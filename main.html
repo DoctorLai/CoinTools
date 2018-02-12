@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>SteemIt Tools</title>
+    <meta name="author" content="@justyy">
+    <script src="js/constants.js"></script>     
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/functions.js"></script>     
+    <script src="js/cointools.js"></script>
+    <script src="js/sorttable.js"></script>
+    <link href="bs/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="bs/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui.css" />
+    <link rel="stylesheet" href="css/custom.css" />
+    <script src="js/jquery-ui.js"></script>     
+    <style>
+    .ext-window {width: 800px;}
+    </style>
+  </head>
+  <body>
+    <div id="tabs" class='ext-window'>
+      <ul>
+        <li><a href="#tabs-general">General</a></li>
+        <li><a href="#tabs-rank">Rank</a></li>
+        <li><a href="#tabs-setting">Setting</a></li>
+        <li><a href="#tabs-log">Log</a></li>        
+      </ul>
+      <div id="tabs-general">
+        <h4>Global Stats</h4>
+        <div id="general_div"> </div>
+      </div>   
+      <div id="tabs-rank">
+        <h4>Cryptocurrency Ranking Table</h4>
+        <div id="rank_div"> </div>
+      </div>   
+      <div id="tabs-setting">
+        <h4>Local Currency</h4>
+        <select class="form-control" id="currency">    
+          <option value=''>Select a Currency</option>    
+        </select>
+        <button class="form-control" style='width: 70px' id="setting_save_btn">Save</button>
+      </div>   
+      <div id="tabs-log">
+        <h4>Proudly brought to you by <a target=_blank href="https://steemit.com/@justyy">@justyy</a></h4>
+        <textarea readonly class='form-control' rows=15 id='about'>           
+        </textarea>         
+      </div>      
+    </div>
+  </body>
+</html>
