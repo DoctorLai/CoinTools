@@ -3,7 +3,7 @@
   "name": "Coin Tools",
   "short_name": "cointools",  
   "default_locale": "en",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "browser_action": {
      "default_icon": "icon.png",
      "default_title": "Coin Tools",
@@ -20,6 +20,7 @@
   "description": "A Chrome Extension that has a few useful tools and graphs for Cryptocurrency",
   "web_accessible_resources": [
   		"js/*", 
+      "lang/*",
   		"images/*",
       "css/*",
   		"bs/*"

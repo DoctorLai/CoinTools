@@ -4,10 +4,12 @@
 const saveSettings = () => {
     let settings = {};
     settings['currency'] = $('select#currency').val();
+    settings['lang'] = $('select#lang').val();
+    settings['conversion'] = $('textarea#conversion').val();
     chrome.storage.sync.set({ 
         cointools: settings
     }, function() {
-        alert('Settings Saved (Required: Reload Extension)');
+        alert(get_text('alert_save'));
     });
 }
 
@@ -136,6 +138,44 @@ const getRankingTable = (currency, dom, limit = 100) => {
     }); 
 }
 
+// ajax calling API
+const getPriceOfUSD = (coin) => {
+    return new Promise((resolve, reject) => {
+        let api = "https://api.coinmarketcap.com/v1/ticker/" + coin + '/';
+        fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
+            resolve(result[0].price_usd);
+        });        
+    });
+}
+
+// ajax get conversion
+const getConversion = async(coin1, coin2) => {
+    let api1 = getPriceOfUSD(coin1);
+    let api2 = getPriceOfUSD(coin2);
+    return await api1 / await api2;
+}
+
+// conversion
+const processConversion = (s) => {
+    let arr = s.trim().split("\n");
+    for (let i = 0; i < arr.length; i ++) {
+        let pair = arr[i].split(" ");
+        if (pair.length == 2) {
+            let a = pair[0].trim().toLowerCase();
+            let b = pair[1].trim().toLowerCase();
+            var pat = /^[a-zA-Z\-]+$/;
+            if (pat.test(a) && pat.test(b)) {
+                let dom = $('div#conversion_results');
+                let dom_id = "convert_" + a.replace("-", "") + "_" + b.replace("-", "");
+                dom.append('<div id="' + dom_id + '"> </div>');
+                getConversion(a, b).then(x => {
+                    $('div#' + dom_id).html("<h4>1 " + a.toUpperCase() + " = <span class=yellow>" + x + "</span> " + b.toUpperCase() + "</h4>");
+                });
+            }
+        }
+    }
+}
+
 // on document ready
 document.addEventListener('DOMContentLoaded', function() {
     // init tabs
@@ -151,18 +191,31 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data && data.cointools) {
             let settings = data.cointools;
             let currency = settings['currency'];
+            let lang = settings['lang'];
+            let conversion = settings['conversion'];
             $("select#currency").val(currency);
-            // general - api https://api.coinmarketcap.com/v1/global/
+            $("select#lang").val(lang);
+            $("textarea#conversion").val(conversion);
+            processConversion(conversion);
+            //general - api https://api.coinmarketcap.com/v1/global/
             getGeneralData(currency, $('div#general_div'));
             // ranking tables - api https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=2000
             getRankingTable(currency, $('div#rank_div'));
         } else {
-            // TODO: first time set default parameters
+            // first time set default parameters
+            // general - api https://api.coinmarketcap.com/v1/global/
+            getGeneralData("", $('div#general_div'));
+            // ranking tables - api https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=2000
+            getRankingTable("", $('div#rank_div'));            
         }
+        // translate
+        ui_translate();
     });
     // save settings when button 'save' is clicked
     $('button#setting_save_btn').click(function() {
         saveSettings();
+        // translate
+        ui_translate();        
     });
     // about
     let manifest = chrome.runtime.getManifest();    

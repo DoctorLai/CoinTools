@@ -36,3 +36,21 @@ const logit = (msg) => {
     let s = dom.val();
     dom.val(s + "\n" + n + ": " + msg);
 }
+
+// read as text
+const readResponseAsText = (response) => {
+    return response.text();
+}
+
+// read as json
+const readResponseAsJSON = (response) => { 
+    return response.json(); 
+} 
+
+// check if valid response
+const validateResponse = (response) => { 
+    if (!response.ok) { 
+        throw Error(response.statusText); 
+    } 
+    return response; 
+}
