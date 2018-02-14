@@ -8,6 +8,10 @@
     <script src="lang/zh-cn.js"></script>         
     <script src="js/constants.js"></script>     
     <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/chartjs-plugin-streaming.js"></script>
+    <script src="js/amcharts.js"></script>
+    <script src="js/pie.js"></script>    
     <script src="js/functions.js"></script>     
     <script src="js/cointools.js"></script>
     <script src="js/sorttable.js"></script>
@@ -21,6 +25,7 @@
     .ext-window {width: 800px;}
     .black {background: black; color: white;}
     .yellow {color: yellow;}
+    .chart {width: 700px; height: 550px;}
     </style>
   </head>
   <body>
@@ -28,6 +33,7 @@
       <ul>
         <li><a id="text_general" href="#tabs-general">General</a></li>
         <li><a id="text_rank" href="#tabs-rank">Rank</a></li>
+        <li><a id="text_chart" href="#tabs-chart">Chart</a></li>
         <li><a id="text_setting" href="#tabs-setting">Setting</a></li>
         <li><a id="text_log" href="#tabs-log">Log</a></li>        
       </ul>
@@ -40,6 +46,10 @@
         <h4 id="text_cryptocurrency_ranking_table">Cryptocurrency Ranking Table</h4>
         <div id="rank_div"> </div>
       </div>   
+      <div id="tabs-chart">
+        <h4 id="text_total_market_cap_usd">Total Market Cap (USD)</h4>
+        <div id="chart_div" class='chart'> </div>
+      </div>         
       <div id="tabs-setting">
         <h4 id="text_local_currency">Local Currency</h4>
         <select class="form-control" id="currency">    

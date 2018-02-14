@@ -1,6 +1,15 @@
 'use strict';
 
 let translation_simplified_chinese = {
+	'chart': '图表',
+	'total_market_cap_usd': '市场占有量(美元)',
+	'coin': '虚拟货币',
+	'price_usd': '美元价格',
+	'price_btc': '比特币价格',
+	'change_1hr': '1小时变化',
+	'change_24hr': '24小时变化',
+	'change_7days': '7天变化',
+	'last_updated': '最后更新',	
 	'convert': '货币转换',
 	'alert_save': '已经保存好，可能需要重新启动程序。',
 	'text_cryptocurrency_ranking_table': '虚拟货币排名',

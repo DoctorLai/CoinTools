@@ -21,6 +21,8 @@ const translation = (lang) => {
 	translate_text($('h4#text_cryptocurrency_ranking_table'), lang, 'text_cryptocurrency_ranking_table');
 	translate_text($('span#proudly_brought_to_you_by'), lang, 'proudly_brought_to_you_by');
 	translate_text($('h4#text_convert'), lang, 'convert');
+	translate_text($('a#text_chart'), lang, 'chart');
+	translate_text($('h4#text_total_market_cap_usd'), lang, 'total_market_cap_usd');
 }
 
 // get ui lang data

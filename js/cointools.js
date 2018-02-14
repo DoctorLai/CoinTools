@@ -96,6 +96,13 @@ const getRankingTable = (currency, dom, limit = 100) => {
     }
     logit("calling " + api);
     dom.html('<img src="images/loading.gif" />');
+    var up_or_down_img = function(x) {
+        if (x >= 0) {
+            return "📈" + x;
+        } else {
+            return "📉" + x;
+        }
+    }
     $.ajax({
         type: "GET",
         url: api,
@@ -103,22 +110,22 @@ const getRankingTable = (currency, dom, limit = 100) => {
             let s = '';
             s += '<table id="ranking" class="sortable">';
             s += '<thead><tr>';
-            s += '<th class=sorttable_sorted>Coin</th>';
-            s += '<th>Price USD</th>';
-            s += '<th>Price BTC</th>';
-            s += '<th>Change 1 Hours</th>';
-            s += '<th>Change 24 Hours</th>';
-            s += '<th>Change 7 Days</th>';
-            s += '<th>Last Updated</th>';
+            s += '<th class=sorttable_sorted>' + get_text('coin', 'Coin') + '</th>';
+            s += '<th>' + get_text('price_usd', 'Price USD') + '</th>';
+            s += '<th>' + get_text('price_btc', 'Price BTC') + '</th>';
+            s += '<th>' + get_text('change_1hr', 'Change 1 Hours') + '</th>';
+            s += '<th>' + get_text('change_24hr', 'Change 24 Hours') + '</th>';
+            s += '<th>' + get_text('change_7days', 'Change 7 Days') + '</th>';
+            s += '<th>' + get_text('last_updated', 'Last Updated') + '</th>';
             s += '</tr></thead><tbody>';            
             for (let i = 0; i < result.length; i ++) {
                 s += '<tr>';
                 s += '<td>' + result[i]['name'] + ' (' + result[i]['symbol'] + ')</td>';
                 s += '<td>' + result[i]['price_usd'] + '</td>';
                 s += '<td>' + result[i]['price_btc'] + '</td>';
-                s += '<td>' + result[i]['percent_change_1h'] + '</td>';
-                s += '<td>' + result[i]['percent_change_24h'] + '</td>';
-                s += '<td>' + result[i]['percent_change_7d'] + '</td>';
+                s += '<td>' + up_or_down_img(result[i]['percent_change_1h']) + '</td>';
+                s += '<td>' + up_or_down_img(result[i]['percent_change_24h']) + '</td>';
+                s += '<td>' + up_or_down_img(result[i]['percent_change_7d']) + '</td>';
                 s += '<td>' + timestampToString(result[i]['last_updated']) + '</td>';
                 s += '</tr>';
             }
@@ -126,6 +133,45 @@ const getRankingTable = (currency, dom, limit = 100) => {
             s += '</table>';
             dom.html(s);
             sorttable.makeSortable(document.getElementById("ranking"));
+            // chart
+            let data = [];
+            let total = 0;
+            for (let i = 0; i < Math.min(15, result.length); i ++) {
+                data.push({'coin': result[i]['name'], 'market_cap_usd': result[i]['market_cap_usd']});
+                total += parseInt(result[i]['market_cap_usd']);
+            }
+            api = "https://api.coinmarketcap.com/v1/global/";
+            $.ajax({
+                type: "GET",
+                url: api,
+                success: function(result) {       
+                    let total_usd = parseInt(result.total_market_cap_usd);
+                    let others = total_usd - total;
+                    data.push({'coin': 'Others', 'market_cap_usd': others});
+                    let chart = AmCharts.makeChart( "chart_div", {
+                        "type": "pie",
+                        "theme": "light",
+                        "dataProvider": data,
+                        "startDuration": 0,
+                        "valueField": "market_cap_usd",
+                        "titleField": "coin",
+                        "balloon":{
+                          "fixedPosition": true
+                        },
+                        "export": {
+                          "enabled": false
+                        }
+                    });                      
+                },
+                error: function(request, status, error) {
+                    logit('Response: ' + request.responseText);
+                    logit('Error: ' + error );
+                    logit('Status: ' + status);
+                },
+                complete: function(data) {
+                    logit("API Finished: " + api);
+                }   
+            });                               
         },
         error: function(request, status, error) {
             logit('Response: ' + request.responseText);
@@ -207,6 +253,8 @@ document.addEventListener('DOMContentLoaded', function() {
             getGeneralData("", $('div#general_div'));
             // ranking tables - api https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=2000
             getRankingTable("", $('div#rank_div'));            
+            // default conversion
+            processConversion($('textarea#conversion').val());
         }
         // translate
         ui_translate();

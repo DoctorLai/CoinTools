@@ -1,6 +1,15 @@
 'use strict';
 
 let translation_english = {
+	'chart': 'Chart',
+	'total_market_cap_usd': 'Total Market Cap (USD)',
+	'coin': 'Coin',
+	'price_usd': 'Price USD',
+	'price_btc': 'Price BTC',
+	'change_1hr': 'Change 1 Hour',
+	'change_24hr': 'Change 24 Hours',
+	'change_7days': 'Change 7 Days',
+	'last_updated': 'Last Updated',
 	'convert': 'Currency Conversion',
 	'alert_save': 'Settings Saved (Required: Reload Extension)',
 	'text_cryptocurrency_ranking_table': 'Cryptocurrency Ranking Table',
