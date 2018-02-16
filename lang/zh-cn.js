@@ -2,7 +2,9 @@
 
 let translation_simplified_chinese = {
 	'chart': '图表',
+	'text_select_a_currency': '请选择货币单位',
 	'total_market_cap_usd': '市场占有量(美元)',
+	'total_market_cap_24_usd': '24小时市场占有量(美元)',
 	'coin': '虚拟货币',
 	'price_usd': '美元价格',
 	'price_btc': '比特币价格',

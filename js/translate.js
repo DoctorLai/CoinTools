@@ -23,6 +23,8 @@ const translation = (lang) => {
 	translate_text($('h4#text_convert'), lang, 'convert');
 	translate_text($('a#text_chart'), lang, 'chart');
 	translate_text($('h4#text_total_market_cap_usd'), lang, 'total_market_cap_usd');
+    translate_text($('h4#text_total_market_cap_usd_24'), lang, 'total_market_cap_24_usd');
+    translate_text($('option#text_select_a_currency'), lang, 'text_select_a_currency');
 }
 
 // get ui lang data

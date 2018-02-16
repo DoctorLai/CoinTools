@@ -2,7 +2,9 @@
 
 let translation_english = {
 	'chart': 'Chart',
+	'text_select_a_currency': 'Please Select a Currency',
 	'total_market_cap_usd': 'Total Market Cap (USD)',
+	'total_market_cap_24_usd': '24 Hour Total Market Cap (USD)',
 	'coin': 'Coin',
 	'price_usd': 'Price USD',
 	'price_btc': 'Price BTC',

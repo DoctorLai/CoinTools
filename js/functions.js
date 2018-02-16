@@ -54,3 +54,8 @@ const validateResponse = (response) => {
     } 
     return response; 
 }
+
+// remove invalid characters for HTML id
+const removeInvalid = (x) => {
+    return x.replace("-", "");
+}

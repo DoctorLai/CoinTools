@@ -87,7 +87,7 @@ const getGeneralData = (currency, dom) => {
 }
 
 // get ranking table from coinmarketcap
-const getRankingTable = (currency, dom, limit = 100) => {
+const getRankingTable = (currency, dom, limit = 200) => {
     let currency_upper = currency.toUpperCase();
     let currency_lower = currency.toLowerCase();
     let api = "https://api.coinmarketcap.com/v1/ticker/?limit=" + limit;
@@ -136,9 +136,14 @@ const getRankingTable = (currency, dom, limit = 100) => {
             // chart
             let data = [];
             let total = 0;
+            // 24 hour vol
+            let total_24 = 0;
+            let data_24 = [];
             for (let i = 0; i < Math.min(15, result.length); i ++) {
                 data.push({'coin': result[i]['name'], 'market_cap_usd': result[i]['market_cap_usd']});
+                data_24.push({'coin': result[i]['name'], '24h_volume_usd': result[i]['24h_volume_usd']});
                 total += parseInt(result[i]['market_cap_usd']);
+                total_24 += parseInt(result[i]['24h_volume_usd']);
             }
             api = "https://api.coinmarketcap.com/v1/global/";
             $.ajax({
@@ -147,7 +152,10 @@ const getRankingTable = (currency, dom, limit = 100) => {
                 success: function(result) {       
                     let total_usd = parseInt(result.total_market_cap_usd);
                     let others = total_usd - total;
+                    let total_usd_24 = parseInt(result.total_24h_volume_usd);
+                    let others_24 = total_usd_24 - total_24;                    
                     data.push({'coin': 'Others', 'market_cap_usd': others});
+                    data_24.push({'coin': 'Others', '24h_volume_usd': others_24});
                     let chart = AmCharts.makeChart( "chart_div", {
                         "type": "pie",
                         "theme": "light",
@@ -161,7 +169,21 @@ const getRankingTable = (currency, dom, limit = 100) => {
                         "export": {
                           "enabled": false
                         }
-                    });                      
+                    });   
+                    let chart_24 = AmCharts.makeChart( "chart_24_div", {
+                        "type": "pie",
+                        "theme": "light",
+                        "dataProvider": data_24,
+                        "startDuration": 0,
+                        "valueField": "24h_volume_usd",
+                        "titleField": "coin",
+                        "balloon":{
+                          "fixedPosition": true
+                        },
+                        "export": {
+                          "enabled": false
+                        }
+                    });                                       
                 },
                 error: function(request, status, error) {
                     logit('Response: ' + request.responseText);
@@ -184,21 +206,68 @@ const getRankingTable = (currency, dom, limit = 100) => {
     }); 
 }
 
-// ajax calling API
+// ajax calling API to return the price of USD for coin
 const getPriceOfUSD = (coin) => {
     return new Promise((resolve, reject) => {
         let api = "https://api.coinmarketcap.com/v1/ticker/" + coin + '/';
         fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
             resolve(result[0].price_usd);
-        });        
+        }).catch(function(error) {
+            logit('Request failed: ' + api + ": " + error);
+            reject(error);
+        });
+    });
+}
+
+// ajax calling API to return the price of currency for 1 BTC
+const getPriceOf1BTC = (currency) => {
+    return new Promise((resolve, reject) => {
+        let api = "https://api.coinmarketcap.com/v1/ticker/bitcoin/?convert=" + currency.toUpperCase();
+        fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {            
+            resolve(result[0]['price_' + currency.toLowerCase()]);
+        }).catch(function(error) {
+            logit('Request failed: ' + api + ": " + error);
+            reject(error);
+        });
+    });
+}
+
+// ajax calling API to return the price of USD for coin
+const getPriceOf = (coin, fiat) => {
+    return new Promise((resolve, reject) => {
+        let api = "https://api.coinmarketcap.com/v1/ticker/" + coin + '/?convert=' + fiat.toUpperCase();
+        fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
+            resolve(result[0]['price_' + fiat.toLowerCase()]);
+        }).catch(function(error) {
+            logit('Request failed: ' + api + ": " + error);
+            reject(error);
+        });
     });
 }
 
 // ajax get conversion
 const getConversion = async(coin1, coin2) => {
-    let api1 = getPriceOfUSD(coin1);
-    let api2 = getPriceOfUSD(coin2);
-    return await api1 / await api2;
+    // determine if input is coin or currency
+    let is_coin1 = !currency_array.includes(coin1.toUpperCase());
+    let is_coin2 = !currency_array.includes(coin2.toUpperCase());
+    // both are coins
+    if ((is_coin1) && (is_coin2)) {
+        let api1 = getPriceOfUSD(coin1);
+        let api2 = getPriceOfUSD(coin2);
+        return await api1 / await api2;
+    }
+    // both are currencies e.g. USD to CNY
+    if ((!is_coin1) && (!is_coin2)) {
+        let api1 = getPriceOf1BTC(coin1);
+        let api2 = getPriceOf1BTC(coin2);
+        return await api2 / await api1;
+    }
+    // converting coin1 to fiat coin2
+    if (is_coin1) {
+        return await getPriceOf(coin1, coin2);
+    } else { // convert coin2 to fiat coin1
+        return 1.0/await getPriceOf(coin2, coin1);
+    }
 }
 
 // conversion
@@ -212,7 +281,7 @@ const processConversion = (s) => {
             var pat = /^[a-zA-Z\-]+$/;
             if (pat.test(a) && pat.test(b)) {
                 let dom = $('div#conversion_results');
-                let dom_id = "convert_" + a.replace("-", "") + "_" + b.replace("-", "");
+                let dom_id = "convert_" + removeInvalid(a) + "_" + removeInvalid(b);
                 dom.append('<div id="' + dom_id + '"> </div>');
                 getConversion(a, b).then(x => {
                     $('div#' + dom_id).html("<h4>1 " + a.toUpperCase() + " = <span class=yellow>" + x + "</span> " + b.toUpperCase() + "</h4>");
@@ -256,6 +325,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // default conversion
             processConversion($('textarea#conversion').val());
         }
+        // about
+        let manifest = chrome.runtime.getManifest();    
+        let app_name = manifest.name + " v" + manifest.version;
+        // version number
+        $('textarea#about').val(get_text('application', 'Application') + ': ' + app_name + '\n' + get_text('chrome_version', 'Chrome Version') + ': ' + getChromeVersion());        
         // translate
         ui_translate();
     });
@@ -265,9 +339,4 @@ document.addEventListener('DOMContentLoaded', function() {
         // translate
         ui_translate();        
     });
-    // about
-    let manifest = chrome.runtime.getManifest();    
-    let app_name = manifest.name + " v" + manifest.version;
-    // version number
-    $('textarea#about').val('Application: ' + app_name + '\n' + 'Chrome Version: ' + getChromeVersion());
 }, false);
