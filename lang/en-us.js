@@ -1,7 +1,14 @@
 'use strict';
 
 let translation_english = {
-	'chart': 'Chart',
+	'amount': 'Amount',
+	'source_type_crypto': 'Source Fiat',
+	'target_type_crypto': 'Target Fiat',	
+	'source_type': 'Source Fiat',
+	'target_type': 'Target Fiat',	
+	'text_tool': 'Tools',
+	'text_currency_convertor': 'Cryptocurrency Converter Calculator',
+	'chart': 'Charts',
 	'text_select_a_currency': 'Please Select a Currency',
 	'total_market_cap_usd': 'Total Market Cap (USD)',
 	'total_market_cap_24_usd': '24 Hour Total Market Cap (USD)',

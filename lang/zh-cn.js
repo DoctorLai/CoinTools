@@ -1,6 +1,13 @@
 'use strict';
 
-let translation_simplified_chinese = {
+let translation_simplified_chinese = {	
+	'amount': '数量',
+	'source_type_crypto': '原虚拟货币',
+	'target_type_crypto': '目标虚拟货币',		
+	'source_type': '源法币',
+	'target_type': '目标法币',
+	'text_tool': '工具',
+	'text_currency_convertor': '虚拟货币转换查询',
 	'chart': '图表',
 	'text_select_a_currency': '请选择货币单位',
 	'total_market_cap_usd': '市场占有量(美元)',
@@ -25,7 +32,7 @@ let translation_simplified_chinese = {
 	'proudly_brought_to_you_by': '开发：',
 	'application': '程序',
 	'chrome_version': '浏览器版本',
-	'api_finished': 'API完成',
+	'api_finished': 'API 调用完成',
 	'calling': '正在调用',
 	'global_stats': '市场概况',
 	'total_market_cap_usd': '所有市场总值（美元）',

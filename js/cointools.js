@@ -1,15 +1,20 @@
 'use strict';
 
 // save settings
-const saveSettings = () => {
+const saveSettings = (msgbox = true) => {
     let settings = {};
     settings['currency'] = $('select#currency').val();
     settings['lang'] = $('select#lang').val();
     settings['conversion'] = $('textarea#conversion').val();
+    settings['amount'] = $('input#amount').val();
+    settings['convert_from'] = $('input#convert_from').val();
+    settings['convert_to'] = $('input#convert_to').val();
     chrome.storage.sync.set({ 
         cointools: settings
     }, function() {
-        alert(get_text('alert_save'));
+        if (msgbox) {
+            alert(get_text('alert_save'));
+        }
     });
 }
 
@@ -29,34 +34,34 @@ const getGeneralData = (currency, dom) => {
             let s = '';
             s += '<table>';
             s += '<tr>';
-            s += '<td>Total Market Cap USD</td>';
+            s += '<td>' + get_text("total_market_cap_usd", "Total Market Cap USD") + '</td>';
             s += '<td>' + result['total_market_cap_usd'] + '</td>';
             s += '</tr>';
             s += '<tr>';
-            s += '<td>Total 24 Hour Volumn USD</td>';
+            s += '<td>' + get_text("total_market_cap_24_usd", 'Total 24 Hour Volumn USD') + '</td>';
             s += '<td>' + result['total_24h_volume_usd'] + '</td>';
             s += '</tr>';
             s += '<tr>';
-            s += '<td>Bitcoin Percentage of Market Cap</td>';
+            s += '<td>' + get_text('bitcoin_percentage', 'Bitcoin Percentage of Market Cap') + '</td>';
             s += '<td>' + result['bitcoin_percentage_of_market_cap'] + '%</td>';
             s += '</tr>';
             s += '<tr>';
-            s += '<td>Active Currencies</td>';
+            s += '<td>' + get_text('active_currencies', 'Active Currencies') + '</td>';
             s += '<td>' + result['active_currencies'] + '</td>';
             s += '</tr>';
             s += '<tr>';
-            s += '<td>Active Assets</td>';
+            s += '<td>' + get_text('active_assets', 'Active Assets') + '</td>';
             s += '<td>' + result['active_assets'] + '</td>';
             s += '</tr>';
             s += '<tr>';
-            s += '<td>Active Markets</td>';
+            s += '<td>' + get_text('active_markets', 'Active Markets') + '</td>';
             s += '<td>' + result['active_markets'] + '</td>';
             s += '</tr>';
             s += '<tr>';
             let key1 = "total_market_cap_" + currency_lower;
             if (key1 in result) {
                 s += '<tr>';
-                s += '<td>Total Market Cap ' + currency_upper + '</td>';
+                s += '<td>' + get_text('total_market_cap', 'Total Market Cap') +' ' + currency_upper + '</td>';
                 s += '<td>' + result[key1] + '</td>';
                 s += '</tr>';
                 s += '<tr>';
@@ -64,12 +69,12 @@ const getGeneralData = (currency, dom) => {
             let key2 = "total_24h_volume_" + currency_lower;
             if (key2 in result) {
                 s += '<tr>';
-                s += '<td>Total 24 Hour Volumn ' + currency_upper + '</td>';
+                s += '<td>' + get_text('total_24_hour_volumn', 'Total 24 Hour Volumn') + ' ' + currency_upper + '</td>';
                 s += '<td>' + result[key2] + '</td>';
                 s += '</tr>';
                 s += '<tr>';
             }
-            s += '<td>Last Updated</td>';
+            s += '<td>' + get_text('last_updated', 'Last Updated') + '</td>';
             s += '<td>' + timestampToString(result['last_updated']) + '</td>';
             s += '</tr>';            
             s += '</table>';
@@ -81,7 +86,7 @@ const getGeneralData = (currency, dom) => {
             logit('Status: ' + status);
         },
         complete: function(data) {
-            logit("API Finished: " + api);
+            logit(get_text("api_finished", "API Finished") + ": " + api);
         }             
     }); 
 }
@@ -191,7 +196,7 @@ const getRankingTable = (currency, dom, limit = 200) => {
                     logit('Status: ' + status);
                 },
                 complete: function(data) {
-                    logit("API Finished: " + api);
+                    logit(get_text("api_finished", "API Finished") + ": " + api);
                 }   
             });                               
         },
@@ -201,7 +206,7 @@ const getRankingTable = (currency, dom, limit = 200) => {
             logit('Status: ' + status);
         },
         complete: function(data) {
-            logit("API Finished: " + api);
+            logit(get_text("api_finished", "API Finished") + ": " + api);
         }             
     }); 
 }
@@ -247,9 +252,17 @@ const getPriceOf = (coin, fiat) => {
 
 // ajax get conversion
 const getConversion = async(coin1, coin2) => {
+    coin1 = coin1.toUpperCase();
+    coin2 = coin2.toUpperCase();
+    if (coin1 in coinmarkcap) {
+        coin1 = coinmarkcap[coin1];
+    }
+    if (coin2 in coinmarkcap) {
+        coin2 = coinmarkcap[coin2];
+    }
     // determine if input is coin or currency
-    let is_coin1 = !currency_array.includes(coin1.toUpperCase());
-    let is_coin2 = !currency_array.includes(coin2.toUpperCase());
+    let is_coin1 = !currency_array.includes(coin1);
+    let is_coin2 = !currency_array.includes(coin2);
     // both are coins
     if ((is_coin1) && (is_coin2)) {
         let api1 = getPriceOfUSD(coin1);
@@ -266,7 +279,7 @@ const getConversion = async(coin1, coin2) => {
     if (is_coin1) {
         return await getPriceOf(coin1, coin2);
     } else { // convert coin2 to fiat coin1
-        return 1.0/await getPriceOf(coin2, coin1);
+        return 1.0 / await getPriceOf(coin2, coin1);
     }
 }
 
@@ -298,8 +311,22 @@ document.addEventListener('DOMContentLoaded', function() {
         $( "#tabs" ).tabs();
     });
     // populate currency symbols
-    for (let i = 0; i < currency_array.length; i ++) {
+    let currency_array_length = currency_array.length;
+    for (let i = 0; i < currency_array_length; ++ i) {
         $('select#currency').append($("<option>").attr('value', currency_array[i]).text(currency_array[i]));
+        $('datalist#convert_from_list').append($("<option>").attr('value', currency_array[i]).text(currency_array[i]));
+        $('datalist#convert_to_list').append($("<option>").attr('value', currency_array[i]).text(currency_array[i]));
+    }
+    $('datalist#convert_from_list').append($("<option id='source_type_crypto'>").attr('value', '').text(get_text('source_type_crypto')));
+    $('datalist#convert_to_list').append($("<option id='target_type_crypto'>").attr('value', '').text(get_text('target_type_crypto')));
+    // populate coin symbols
+    let coin_array = Object.keys(coinmarkcap);
+    let coin_array_length = coin_array.length;
+    for (let i = 0; i < coin_array_length; ++ i) {
+        let coin_key = coin_array[i];
+        let coin = coin_key;
+        $('datalist#convert_from_list').append($("<option>").attr('value', coin).text(coin));
+        $('datalist#convert_to_list').append($("<option>").attr('value', coin).text(coin));
     }
     // load steem id
     chrome.storage.sync.get('cointools', function(data) {
@@ -311,6 +338,9 @@ document.addEventListener('DOMContentLoaded', function() {
             $("select#currency").val(currency);
             $("select#lang").val(lang);
             $("textarea#conversion").val(conversion);
+            $("input#amount").val(settings['amount']);
+            $("input#convert_from").val(settings['convert_from']);
+            $("input#convert_to").val(settings['convert_to']);
             processConversion(conversion);
             //general - api https://api.coinmarketcap.com/v1/global/
             getGeneralData(currency, $('div#general_div'));
@@ -338,5 +368,21 @@ document.addEventListener('DOMContentLoaded', function() {
         saveSettings();
         // translate
         ui_translate();        
+    });
+    // convert currency calculator
+    $('button#btn_convert').click(function() {
+        let amount = $('input#amount').val();
+        let a = $('input#convert_from').val();
+        let b = $('input#convert_to').val();
+        if ((a != '') && (b != '') && (amount >= 0)) {
+            getConversion(a, b).then(x => {
+                $('textarea#convert_result').append(amount + " " + a.toUpperCase() + " = " + (x * amount) + " " + b.toUpperCase() + "\n");
+                let psconsole = $('textarea#convert_result');
+                if (psconsole.length) {
+                    psconsole.scrollTop(psconsole[0].scrollHeight - psconsole.height());
+                }
+                saveSettings(false);
+            });
+        }
     });
 }, false);

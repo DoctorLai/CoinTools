@@ -12,6 +12,7 @@
     <script src="js/chartjs-plugin-streaming.js"></script>
     <script src="js/amcharts.js"></script>
     <script src="js/pie.js"></script>    
+    <script src="js/coinmarkcap.js"></script>     
     <script src="js/functions.js"></script>     
     <script src="js/cointools.js"></script>
     <script src="js/sorttable.js"></script>
@@ -33,7 +34,8 @@
       <ul>
         <li><a id="text_general" href="#tabs-general">General</a></li>
         <li><a id="text_rank" href="#tabs-rank">Rank</a></li>
-        <li><a id="text_chart" href="#tabs-chart">Chart</a></li>
+        <li><a id="text_chart" href="#tabs-chart">Charts</a></li>
+        <li><a id="text_tool" href="#tabs-tool">Tools</a></li>
         <li><a id="text_setting" href="#tabs-setting">Setting</a></li>
         <li><a id="text_log" href="#tabs-log">Log</a></li>        
       </ul>
@@ -51,7 +53,23 @@
         <div id="chart_div" class='chart'> </div>
         <h4 id="text_total_market_cap_usd_24">24 Hour Total Market Cap (USD)</h4>
         <div id="chart_24_div" class='chart'> </div>
-      </div>         
+      </div> 
+      <div id="tabs-tool">
+        <h4 id="text_currency_convertor">Cryptocurrency Converter Calculator</h4>
+        <form class='form-inline'>
+          <input class="form-control" style='width: 200px' type='number' value="1.0" id='amount' placeholder="Amount">
+          <input type=text list='convert_from_list' class="form-control" style='width: 170px' id='convert_from' />
+          <datalist id='convert_from_list'>
+            <option id='source_type' value=''>From Currency</option>
+          </datalist>
+          <input type=text list='convert_to_list' class="form-control" style='width: 170px' id='convert_to'>
+          <datalist id='convert_to_list'>
+            <option id='target_type' value=''>Convert To</option>
+          </datalist>
+          <button type='button' class="form-control" style='width: 110px' id='btn_convert'>Convert</button>
+        </form>
+        <textarea style='background:black; color:white;' id='convert_result' class=form-control rows=20></textarea>
+      </div>                
       <div id="tabs-setting">
         <h4 id="text_local_currency">Local Currency</h4>
         <select class="form-control" id="currency">    

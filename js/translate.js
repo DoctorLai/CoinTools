@@ -8,6 +8,14 @@ const translate_text = (dom, lang, text) => {
     }
 }
 
+// translation a placeholder text
+const translate_placeholder_text = (dom, lang, text) => {
+    let s = lang[text];
+    if (s) {
+        dom.attr("placeholder", s);
+    }
+}
+
 // translation language
 const translation = (lang) => {
     translate_text($('a#text_general'), lang, 'general');
@@ -25,6 +33,14 @@ const translation = (lang) => {
 	translate_text($('h4#text_total_market_cap_usd'), lang, 'total_market_cap_usd');
     translate_text($('h4#text_total_market_cap_usd_24'), lang, 'total_market_cap_24_usd');
     translate_text($('option#text_select_a_currency'), lang, 'text_select_a_currency');
+    translate_text($('a#text_tool'), lang, 'text_tool');
+    translate_text($('h4#text_currency_convertor'), lang, 'text_currency_convertor');
+    translate_text($('button#btn_convert'), lang, 'convert');
+    translate_text($('option#source_type'), lang, 'source_type');
+    translate_text($('option#target_type'), lang, 'target_type');
+    translate_text($('option#source_type_crypto'), lang, 'source_type_crypto');
+    translate_text($('option#target_type_crypto'), lang, 'target_type_crypto');    
+    translate_placeholder_text($('input#amount'), lang, 'amount');
 }
 
 // get ui lang data
