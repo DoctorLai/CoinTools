@@ -1,6 +1,6 @@
 'use strict';
 
-let translation_simplified_chinese = {	
+let translation_traditional_chinese = {	
 	'amount': '數量',
 	'source_type_crypto': '原虛擬貨幣',
 	'target_type_crypto': '目標虛擬貨幣',		
