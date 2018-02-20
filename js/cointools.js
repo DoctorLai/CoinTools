@@ -115,7 +115,7 @@ const getRankingTable = (currency, dom, limit = 200) => {
             let s = '';
             s += '<table id="ranking" class="sortable">';
             s += '<thead><tr>';
-            s += '<th class=sorttable_sorted>' + get_text('coin', 'Coin') + '</th>';
+            s += '<th>' + get_text('coin', 'Coin') + '</th>';
             s += '<th>' + get_text('price_usd', 'Price USD') + '</th>';
             s += '<th>' + get_text('price_btc', 'Price BTC') + '</th>';
             s += '<th>' + get_text('change_1hr', 'Change 1 Hours') + '</th>';
@@ -125,7 +125,7 @@ const getRankingTable = (currency, dom, limit = 200) => {
             s += '</tr></thead><tbody>';            
             for (let i = 0; i < result.length; i ++) {
                 s += '<tr>';
-                s += '<td>' + result[i]['name'] + ' (' + result[i]['symbol'] + ')</td>';
+                s += '<td><button coin="' + result[i]['id'] + '" class="crypto">' + result[i]['name'] + ' (' + result[i]['symbol'] + ')</button></td>';
                 s += '<td>' + result[i]['price_usd'] + '</td>';
                 s += '<td>' + result[i]['price_btc'] + '</td>';
                 s += '<td>' + up_or_down_img(result[i]['percent_change_1h']) + '</td>';
@@ -137,6 +137,21 @@ const getRankingTable = (currency, dom, limit = 200) => {
             s += '</tbody>';
             s += '</table>';
             dom.html(s);
+            // coins in ranking table
+            $('button.crypto').click(function() {                
+                let coin = $(this).attr("coin");
+                let currency = $('select#currency').val();
+                let api = 'https://api.coinmarketcap.com/v1/ticker/' + coin.toLowerCase() + '/';
+                if (currency != '') {
+                    api += '?convert=' + currency;
+                }                
+                fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
+                    result = result[0];
+                    alert(getCoinReport(result, currency));
+                }).catch(function(error) {
+                    logit('Request failed: ' + api + ": " + error);                    
+                });                                 
+            });            
             sorttable.makeSortable(document.getElementById("ranking"));
             // chart
             let data = [];
@@ -283,6 +298,32 @@ const getConversion = async(coin1, coin2) => {
     }
 }
 
+// get cryptocurrency report
+const getCoinReport = (result, currency = '') => {
+    let s = '---------------\n';
+    s += get_text("rank", "Rank") + ": " + result['rank'] + "\n";
+    s += get_text("id", "ID") + ": " + result['id'] + "\n";
+    s += get_text("price_usd", "Price of USD") + ": " + result['price_usd'] + "\n";
+    s += get_text("price_btc", "Price of BTC") + ": " + result['price_btc'] + "\n";
+    s += get_text("total_market_cap_24_usd", "24 Hour Total Market Cap (USD)") + ": " + result['24h_volume_usd'] + "\n";
+    s += get_text("total_market_cap_usd", "Total Market Cap (USD)") + ": " + result['market_cap_usd'] + "\n";
+    s += get_text("available_supply", "Available Supply") + ": " + result['available_supply'] + "\n";
+    s += get_text("total_supply", "Total Supply") + ": " + result['total_supply'] + "\n";
+    s += get_text("max_supply", "Max Supply") + ": " + result['max_supply'] + "\n";
+    s += get_text("change_1hr", "Percentage Change 1 Hour") + ": " + result['percent_change_1h'] + "\n";
+    s += get_text("change_24hr", "Percentage Change 24 Hours") + ": " + result['percent_change_24h'] + "\n";
+    s += get_text("change_7days", "Percentage Change 7 Days") + ": " + result['percent_change_7d'] + "\n";
+    if (currency != '') {
+        let cur = currency; 
+        currency = currency.toLowerCase();
+        s += get_text("price_cur", "Price of ") + " (" + cur + "): " + result['price_' + currency] + "\n";
+        s += get_text("24h_volume_cur", "24 Hour Total Market Cap") + " (" + cur + "): " + result['24h_volume_' + currency] + "\n";
+        s += get_text("market_cap_cur", "Total Market Cap") + " (" + cur + "): " + result['market_cap_' + currency] + "\n";
+    }
+    s += get_text("last_updated", "Last Updated") + ": " + result['last_updated'] + "\n";
+    return s;
+}
+
 // conversion
 const processConversion = (s) => {
     let arr = s.trim().split("\n");
@@ -299,6 +340,25 @@ const processConversion = (s) => {
                 getConversion(a, b).then(x => {
                     $('div#' + dom_id).html("<h4>1 " + a.toUpperCase() + " = <span class=yellow>" + x + "</span> " + b.toUpperCase() + "</h4>");
                 });
+            }
+        } else if (pair.length == 1) {
+            let a = pair[0].trim().toUpperCase();
+            let currency = $('select#currency').val();
+            var pat = /^[a-zA-Z\-]+$/;
+            if (pat.test(a)) {
+                if (a in coinmarkcap) {
+                    a = coinmarkcap[a];                    
+                }                
+                let api = 'https://api.coinmarketcap.com/v1/ticker/' + a.toLowerCase() + '/';
+                if (currency != '') {
+                    api += '?convert=' + currency;
+                }                
+                fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
+                    result = result[0];
+                    $('textarea#convert_result').append(getCoinReport(result, currency));
+                }).catch(function(error) {
+                    logit('Request failed: ' + api + ": " + error);                    
+                });                
             }
         }
     }
@@ -384,5 +444,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 saveSettings(false);
             });
         }
+    });
+    // clear console
+    $('button#btn_clear').click(function() {
+        $('textarea#convert_result').text('');
     });
 }, false);

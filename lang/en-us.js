@@ -1,7 +1,15 @@
 'use strict';
 
 let translation_english = {
+	'id': 'ID',
+	'available_supply': 'Available Supply',
+	'total_supply': 'Total Supply',
+	'max_supply': 'Max Supply',
+	'price_cur': 'Price of',
+	'24h_volume_cur': '24 Hour Total Volumn',
+	'market_cap_cur': 'Total Market Cap',	
 	'amount': 'Amount',
+	'clear': 'Clear',
 	'source_type_crypto': 'Source Fiat',
 	'target_type_crypto': 'Target Fiat',	
 	'source_type': 'Source Fiat',
@@ -18,8 +26,7 @@ let translation_english = {
 	'change_1hr': 'Change 1 Hour',
 	'change_24hr': 'Change 24 Hours',
 	'change_7days': 'Change 7 Days',
-	'last_updated': 'Last Updated',
-	'convert': 'Currency Conversion',
+	'convert': 'Convert',
 	'alert_save': 'Settings Saved (Required: Reload Extension)',
 	'text_cryptocurrency_ranking_table': 'Cryptocurrency Ranking Table',
 	'ui_language': 'UI Language',

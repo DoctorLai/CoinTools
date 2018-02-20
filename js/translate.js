@@ -36,6 +36,7 @@ const translation = (lang) => {
     translate_text($('a#text_tool'), lang, 'text_tool');
     translate_text($('h4#text_currency_convertor'), lang, 'text_currency_convertor');
     translate_text($('button#btn_convert'), lang, 'convert');
+    translate_text($('button#btn_clear'), lang, 'clear');
     translate_text($('option#source_type'), lang, 'source_type');
     translate_text($('option#target_type'), lang, 'target_type');
     translate_text($('option#source_type_crypto'), lang, 'source_type_crypto');
@@ -49,6 +50,8 @@ const get_lang = () => {
     switch (lang) {
         case 'zh-cn': return (translation_simplified_chinese); 
         case 'en-us': return (translation_english); 
+        case 'zh-hk': return (translation_traditional_chinese); 
+        case 'pt-br': return (translation_portuguese);
     }	
 }
 

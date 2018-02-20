@@ -1,7 +1,15 @@
 'use strict';
 
 let translation_traditional_chinese = {	
+	'id': 'ID',
+	'available_supply': '存量',
+	'total_supply': '總供給量',
+	'max_supply': '最大供給量',
+	'price_cur': '價格',
+	'24h_volume_cur': '24小時內總量',
+	'market_cap_cur': '市場總量',
 	'amount': '數量',
+	'clear': '清空',
 	'source_type_crypto': '原虛擬貨幣',
 	'target_type_crypto': '目標虛擬貨幣',		
 	'source_type': '源法幣',

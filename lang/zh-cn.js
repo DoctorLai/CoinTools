@@ -1,7 +1,15 @@
 'use strict';
 
 let translation_simplified_chinese = {	
+	'id': 'ID',
+	'available_supply': '存量',
+	'total_supply': '总供给量',
+	'max_supply': '最大供给量',
+	'price_cur': '价格',
+	'24h_volume_cur': '24小时内总量',
+	'market_cap_cur': '市场总量',
 	'amount': '数量',
+	'clear': '清空',
 	'source_type_crypto': '原虚拟货币',
 	'target_type_crypto': '目标虚拟货币',		
 	'source_type': '源法币',
@@ -18,7 +26,6 @@ let translation_simplified_chinese = {
 	'change_1hr': '1小时变化',
 	'change_24hr': '24小时变化',
 	'change_7days': '7天变化',
-	'last_updated': '最后更新',	
 	'convert': '货币转换',
 	'alert_save': '已经保存好，可能需要重新启动程序。',
 	'text_cryptocurrency_ranking_table': '虚拟货币排名',

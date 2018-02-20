@@ -6,6 +6,8 @@
     <meta name="author" content="@justyy">
     <script src="lang/en-us.js"></script>     
     <script src="lang/zh-cn.js"></script>         
+    <script src="lang/zh-hk.js"></script>     
+    <script src="lang/pt-br.js"></script>     
     <script src="js/constants.js"></script>     
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/Chart.min.js"></script>
@@ -57,7 +59,7 @@
       <div id="tabs-tool">
         <h4 id="text_currency_convertor">Cryptocurrency Converter Calculator</h4>
         <form class='form-inline'>
-          <input class="form-control" style='width: 200px' type='number' value="1.0" id='amount' placeholder="Amount">
+          <input class="form-control" style='width: 180px' type='number' value="1.0" id='amount' placeholder="Amount">
           <input type=text list='convert_from_list' class="form-control" style='width: 170px' id='convert_from' />
           <datalist id='convert_from_list'>
             <option id='source_type' value=''>From Currency</option>
@@ -66,9 +68,10 @@
           <datalist id='convert_to_list'>
             <option id='target_type' value=''>Convert To</option>
           </datalist>
-          <button type='button' class="form-control" style='width: 110px' id='btn_convert'>Convert</button>
+          <button type='button' class="form-control" style='width: 90px' id='btn_convert'>Convert</button>
+          <button type='button' class="form-control" style='width: 90px' id='btn_clear'>Clear</button>
         </form>
-        <textarea style='background:black; color:white;' id='convert_result' class=form-control rows=20></textarea>
+        <textarea style='background:black; color:white;' readonly id='convert_result' class=form-control rows=20></textarea>
       </div>                
       <div id="tabs-setting">
         <h4 id="text_local_currency">Local Currency</h4>
@@ -79,6 +82,8 @@
         <select class="form-control" id="lang">
           <option value="en-us">English</option>
           <option value="zh-cn">简体中文</option>
+          <option value="zh-hk">繁體中文</option>
+          <option value="pt-br">Português</option>
         </select>
         <h4 id="text_convert">Conversion</h4>
         <textarea class="form-control" id='conversion' rows=10 style='width:100%'>steem-dollars bitcoin</textarea>
