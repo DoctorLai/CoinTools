@@ -8,8 +8,8 @@ let translation_turkish = {
 	'price_cur': 'Fiyatı',
 	'24h_volume_cur': '24 saatlik Toplam Hacim',
 	'market_cap_cur': 'Toplam Market Hacmi',
-	'amount': 'Miktar
-	'clear': 'Temizle
+	'amount': 'Miktar',
+	'clear': 'Temizle',
 	'source_type_crypto': 'Kaynak Fiat',
 	'target_type_crypto': 'Hedef Fiat',
 	'source_type': 'Kaynak Fiat',
