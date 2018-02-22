@@ -1,6 +1,6 @@
 'use strict';
 
-let translation_english = {
+let translation_italian = {
 	'id': 'ID',
 	'available_supply': 'Quantità Erogata',
 	'total_supply': 'Quantità Totale',
