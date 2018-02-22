@@ -17,7 +17,7 @@ let translation_italian = {
 	'text_tool': 'Strumenti',
 	'text_currency_convertor': 'Convertitore di Criptovalute',
 	'chart': 'Grafici',
-	'text_select_a_currency': 'Si prega di selezionare una valuta,
+	'text_select_a_currency': 'Si prega di selezionare una valuta',
 	'total_market_cap_usd': 'Capitalizzazione di Mercato totale (USD)',
 	'total_market_cap_24_usd': 'Capitalizzazione di Mercato totale delle ultime 24 ore (USD)',
 	'coin': 'Coin',
