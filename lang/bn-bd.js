@@ -1,6 +1,9 @@
 'use strict';
 
 let translation_bengali = {
+	'history': 'ইতিহাস',
+	'text_history_data': 'ইতিহাস তথ্য',
+	'query': 'প্রশ্ন',	
 	'id': 'আইডি',
 	'available_supply': 'উপলব্ধ সরবরাহ',
 	'total_supply': 'সর্বমোট সরবরাহ',

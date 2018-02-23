@@ -1,6 +1,9 @@
 'use strict';
 
 let translation_portuguese = {
+	'history': 'história',
+	'text_history_data': 'Dados da história',
+	'query': 'Inquerir',   	
 	'id': 'Identidade',
 	'available_supply': 'Suprimento disponível',
 	'total_supply': 'Suprimento total',

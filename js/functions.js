@@ -59,3 +59,8 @@ const validateResponse = (response) => {
 const removeInvalid = (x) => {
     return x.replace("-", "");
 }
+
+// timestamp to Date
+const getDateString = (ts) => {
+    return new Date(ts * 1000).toISOString().substring(0, 10);
+}

@@ -1,6 +1,9 @@
 'use strict';
 
 let translation_turkish = {
+	'history': 'Tarihçe',
+	'text_history_data': 'Geçmiş Verileri',
+	'query': 'Sorgu',   	
 	'id': 'Kimlik',
 	'available_supply': 'Kullanılabilir Miktar',
 	'total_supply': 'Toplam Miktar',

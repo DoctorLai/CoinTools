@@ -1,5 +1,7 @@
 'use strict';
 
+// https://min-api.cryptocompare.com/data/histominute?fsym='+symbol+'&tsym=USD&limit=1440&e=CCCAGG
+
 // save settings
 const saveSettings = (msgbox = true) => {
     let settings = {};
@@ -9,6 +11,8 @@ const saveSettings = (msgbox = true) => {
     settings['amount'] = $('input#amount').val();
     settings['convert_from'] = $('input#convert_from').val();
     settings['convert_to'] = $('input#convert_to').val();
+    settings['convert_from_history'] = $('input#convert_from_history').val();
+    settings['convert_to_history'] = $('input#convert_to_history').val();
     chrome.storage.sync.set({ 
         cointools: settings
     }, function() {
@@ -209,6 +213,7 @@ const getRankingTable = (currency, dom, limit = 200) => {
                     logit('Response: ' + request.responseText);
                     logit('Error: ' + error );
                     logit('Status: ' + status);
+                    dom.html("");
                 },
                 complete: function(data) {
                     logit(get_text("api_finished", "API Finished") + ": " + api);
@@ -219,6 +224,7 @@ const getRankingTable = (currency, dom, limit = 200) => {
             logit('Response: ' + request.responseText);
             logit('Error: ' + error );
             logit('Status: ' + status);
+            dom.html("");
         },
         complete: function(data) {
             logit(get_text("api_finished", "API Finished") + ": " + api);
@@ -320,7 +326,9 @@ const getCoinReport = (result, currency = '') => {
         s += get_text("24h_volume_cur", "24 Hour Total Market Cap") + " (" + cur + "): " + result['24h_volume_' + currency] + "\n";
         s += get_text("market_cap_cur", "Total Market Cap") + " (" + cur + "): " + result['market_cap_' + currency] + "\n";
     }
-    s += get_text("last_updated", "Last Updated") + ": " + result['last_updated'] + "\n";
+    let dateobject = new Date(result['last_updated'] * 1000);
+    let datestring = dateobject.toISOString();
+    s += get_text("last_updated", "Last Updated") + ": " + datestring + "\n";
     return s;
 }
 
@@ -364,6 +372,103 @@ const processConversion = (s) => {
     }
 }
 
+// get history
+const getHistory = (a, b, dom) => {
+    let api = "https://min-api.cryptocompare.com/data/histoday?fsym=" + a + "&tsym=" + b + "&limit=30&e=CCCAGG";
+    logit("calling " + api);
+    dom.html('<img src="images/loading.gif" />');
+    $.ajax({
+        type: "GET",
+        url: api,
+        success: function(data) {
+            if (data && data.Data && data.Response == 'Success') {
+                let data_open = [];
+                let data_close = [];
+                let data_high = [];
+                let data_low = [];
+                let arr = data.Data;
+                let datalen = arr.length;
+                for (let i = 0; i < datalen; ++ i) {
+                    let date = new Date(arr[i].time * 1000);
+                    data_open.push({x: date, y: arr[i].open});
+                    data_close.push({x: date, y: arr[i].close});
+                    data_high.push({x: date, y: arr[i].high});
+                    data_low.push({x: date, y: arr[i].low});
+                }
+                let chart = new CanvasJS.Chart("chartContainer", {
+                    title:{
+                        text: a + " => " + b
+                    },
+                    axisY:[{
+                        title: b,
+                        lineColor: "#C24642",
+                        tickColor: "#C24642",
+                        labelFontColor: "#C24642",
+                        titleFontColor: "#C24642",
+                        suffix: "k"
+                    }],
+                    toolTip: {
+                        shared: true
+                    },
+                    legend: {
+                        cursor: "pointer",
+                        itemclick: function(e) {
+                            if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                                e.dataSeries.visible = false;
+                            } else {
+                                e.dataSeries.visible = true;
+                            }
+                            e.chart.render();
+                        }           
+                    },
+                    data: [{
+                        type: "line",
+                        name: "Open",
+                        color: "#369EAD",
+                        showInLegend: true,
+                        axisYIndex: 1,
+                        dataPoints: data_open
+                    },
+                    {
+                        type: "line",
+                        name: "Close",
+                        color: "#C24642",
+                        axisYIndex: 0,
+                        showInLegend: true,
+                        dataPoints: data_close
+                    },
+                    {
+                        type: "line",
+                        name: "Low",
+                        color: "blue",
+                        axisYIndex: 0,
+                        showInLegend: true,
+                        dataPoints: data_low
+                    },                    
+                    {
+                        type: "line",
+                        name: "High",
+                        color: "#7F6084",
+                        axisYType: "secondary",
+                        showInLegend: true,
+                        dataPoints: data_high
+                    }]
+                });
+                chart.render();
+            }
+        },
+        error: function(request, status, error) {
+            logit('Response: ' + request.responseText);
+            logit('Error: ' + error );
+            logit('Status: ' + status);
+            dom.html("");
+        },
+        complete: function(data) {
+            logit(get_text("api_finished", "API Finished") + ": " + api);
+        }             
+    });     
+}
+
 // on document ready
 document.addEventListener('DOMContentLoaded', function() {
     // init tabs
@@ -401,6 +506,8 @@ document.addEventListener('DOMContentLoaded', function() {
             $("input#amount").val(settings['amount']);
             $("input#convert_from").val(settings['convert_from']);
             $("input#convert_to").val(settings['convert_to']);
+            $("input#convert_from_history").val(settings['convert_from_history']);
+            $("input#convert_to_history").val(settings['convert_to_history']);
             processConversion(conversion);
             //general - api https://api.coinmarketcap.com/v1/global/
             getGeneralData(currency, $('div#general_div'));
@@ -448,5 +555,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // clear console
     $('button#btn_clear').click(function() {
         $('textarea#convert_result').text('');
+    });
+    // history data
+    $('button#btn_history').click(function() {
+        saveSettings(false);        
+        let a = $('input#convert_from_history').val();
+        let b = $('input#convert_to_history').val();
+        if ((a != '') && (b != '')) {
+            getHistory(a, b, $('div#chartContainer'));            
+        }        
     });
 }, false);

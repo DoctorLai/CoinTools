@@ -4,12 +4,18 @@
     <meta charset="UTF-8"/>
     <title>SteemIt Tools</title>
     <meta name="author" content="@justyy">
+    <script src="lang/bn-bd.js"></script>     
     <script src="lang/en-us.js"></script>     
     <script src="lang/zh-cn.js"></script>         
     <script src="lang/zh-hk.js"></script>     
     <script src="lang/pt-br.js"></script>     
-    <script src="js/constants.js"></script>     
+    <script src="lang/nl-nl.js"></script>     
+    <script src="lang/tr-tr.js"></script>     
+    <script src="lang/it-it.js"></script>     
+    <script src="lang/es-sp.js"></script>     
+    <script src="js/constants.js"></script>         
     <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/canvasjs.min.js"></script>     
     <script src="js/Chart.min.js"></script>
     <script src="js/chartjs-plugin-streaming.js"></script>
     <script src="js/amcharts.js"></script>
@@ -38,6 +44,7 @@
         <li><a id="text_rank" href="#tabs-rank">Rank</a></li>
         <li><a id="text_chart" href="#tabs-chart">Charts</a></li>
         <li><a id="text_tool" href="#tabs-tool">Tools</a></li>
+        <li><a id="text_history" href="#tabs-history">History</a></li>
         <li><a id="text_setting" href="#tabs-setting">Setting</a></li>
         <li><a id="text_log" href="#tabs-log">Log</a></li>        
       </ul>
@@ -60,19 +67,28 @@
         <h4 id="text_currency_convertor">Cryptocurrency Converter Calculator</h4>
         <form class='form-inline'>
           <input class="form-control" style='width: 180px' type='number' value="1.0" id='amount' placeholder="Amount">
-          <input type=text list='convert_from_list' class="form-control" style='width: 170px' id='convert_from' />
+          <input type=text list='convert_from_list' class="form-control" style='width: 150px' id='convert_from' />
           <datalist id='convert_from_list'>
             <option id='source_type' value=''>From Currency</option>
           </datalist>
-          <input type=text list='convert_to_list' class="form-control" style='width: 170px' id='convert_to'>
+          <input type=text list='convert_to_list' class="form-control" style='width: 150px' id='convert_to'>
           <datalist id='convert_to_list'>
             <option id='target_type' value=''>Convert To</option>
           </datalist>
-          <button type='button' class="form-control" style='width: 90px' id='btn_convert'>Convert</button>
-          <button type='button' class="form-control" style='width: 90px' id='btn_clear'>Clear</button>
+          <button type='button' class="form-control" style='width: 120px' id='btn_convert'>Convert</button>
+          <button type='button' class="form-control" style='width: 120px' id='btn_clear'>Clear</button>
         </form>
         <textarea style='background:black; color:white;' readonly id='convert_result' class=form-control rows=20></textarea>
-      </div>                
+      </div>     
+      <div id="tabs-history">
+        <h4 id="text_history_data">History Data</h4>
+        <form class='form-inline'>
+          <input type=text list='convert_from_list' class="form-control" style='width: 150px' id='convert_from_history' />
+          <input type=text list='convert_to_list' class="form-control" style='width: 150px' id='convert_to_history'>
+          <button type='button' class="form-control" style='width: 120px' id='btn_history'>Query</button>
+        </form>
+        <div id="chartContainer" style="height: 450px; width: 750px;"></div>
+      </div>                   
       <div id="tabs-setting">
         <h4 id="text_local_currency">Local Currency</h4>
         <select class="form-control" id="currency">    
@@ -84,11 +100,16 @@
           <option value="zh-cn">简体中文</option>
           <option value="zh-hk">繁體中文</option>
           <option value="pt-br">Português</option>
+          <option value="nl-nl">Nederlands</option>
+          <option value="tr-tr">Türk</option>
+          <option value="es-sp">Español</option>
+          <option value="it-it">italiano</option>
+          <option value="bn-bd">বাঙালি</option>
         </select>
         <h4 id="text_convert">Conversion</h4>
         <textarea class="form-control" id='conversion' rows=10 style='width:100%'>steem-dollars bitcoin</textarea>
         <br />
-        <button class="form-control" style='width: 70px' id="setting_save_btn">Save</button>
+        <button class="form-control" style='width: 130px' id="setting_save_btn">Save</button>
       </div>   
       <div id="tabs-log">
         <h4><span id='proudly_brought_to_you_by'>Proudly brought to you by</span> <a target=_blank href="https://steemit.com/@justyy">@justyy</a></h4>

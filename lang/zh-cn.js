@@ -1,6 +1,9 @@
 'use strict';
 
 let translation_simplified_chinese = {	
+	'history': '历史',
+	'text_history_data': '历史数据',
+	'query': '查询',
 	'id': 'ID',
 	'available_supply': '存量',
 	'total_supply': '总供给量',

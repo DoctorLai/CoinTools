@@ -1,6 +1,9 @@
 'use strict';
 
 let translation_traditional_chinese = {	
+	'history': '歷史',
+	'text_history_data': '歷史數據',
+	'query': '詢問',  		
 	'id': 'ID',
 	'available_supply': '存量',
 	'total_supply': '總供給量',

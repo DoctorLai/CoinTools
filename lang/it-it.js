@@ -1,6 +1,9 @@
 'use strict';
 
 let translation_italian = {
+	'history': 'storia',
+	'text_history_data': 'Dati storici',
+	'query': 'domanda',   	
 	'id': 'ID',
 	'available_supply': 'Quantità Erogata',
 	'total_supply': 'Quantità Totale',

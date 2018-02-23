@@ -1,6 +1,9 @@
 'use strict';
 
 let translation_dutch = {
+	'history': 'geschiedenis',
+	'text_history_data': 'Geschiedenisgegevens',
+	'query': 'vraag',   	
 	'id': 'ID',
 	'available_supply': 'Beschikbare levering',
 	'total_supply': 'Totale levering',

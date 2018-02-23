@@ -1,6 +1,9 @@
 'use strict';
 
 let translation_english = {
+	'history': 'History',
+	'text_history_data': 'History Data',
+	'query': 'Query',
 	'id': 'ID',
 	'available_supply': 'Available Supply',
 	'total_supply': 'Total Supply',

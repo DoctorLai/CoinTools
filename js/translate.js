@@ -34,8 +34,11 @@ const translation = (lang) => {
     translate_text($('h4#text_total_market_cap_usd_24'), lang, 'total_market_cap_24_usd');
     translate_text($('option#text_select_a_currency'), lang, 'text_select_a_currency');
     translate_text($('a#text_tool'), lang, 'text_tool');
+    translate_text($('a#text_history'), lang, 'history');
     translate_text($('h4#text_currency_convertor'), lang, 'text_currency_convertor');
+    translate_text($('h4#text_history_data'), lang, 'text_history_data');
     translate_text($('button#btn_convert'), lang, 'convert');
+    translate_text($('button#btn_history'), lang, 'query');
     translate_text($('button#btn_clear'), lang, 'clear');
     translate_text($('option#source_type'), lang, 'source_type');
     translate_text($('option#target_type'), lang, 'target_type');
@@ -52,6 +55,11 @@ const get_lang = () => {
         case 'en-us': return (translation_english); 
         case 'zh-hk': return (translation_traditional_chinese); 
         case 'pt-br': return (translation_portuguese);
+        case 'nl-nl': return (translation_dutch);
+        case 'tr-tr': return (translation_turkish);
+        case 'es-sp': return (translation_spanish);
+        case 'it-it': return (translation_italian);
+        case 'bn-bd': return (translation_bengali);
     }	
 }
 

@@ -1,6 +1,9 @@
 'use strict';
 
 let translation_spanish = {
+        'history': 'historia',
+        'text_history_data': 'Datos históricos',
+        'query': 'Consulta',              
         'id': 'ID',
         'available_supply': 'Oferta Disponible',
         'total_supply': 'Oferta Total',
