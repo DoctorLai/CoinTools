@@ -1,6 +1,6 @@
 'use strict';
 
-let translation_english = {
+let translation_bengali = {
 	'id': 'আইডি',
 	'available_supply': 'উপলব্ধ সরবরাহ',
 	'total_supply': 'সর্বমোট সরবরাহ',
