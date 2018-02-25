@@ -1,7 +1,5 @@
 'use strict';
 
-// https://min-api.cryptocompare.com/data/histominute?fsym='+symbol+'&tsym=USD&limit=1440&e=CCCAGG
-
 // save settings
 const saveSettings = (msgbox = true) => {
     let settings = {};
@@ -13,6 +11,7 @@ const saveSettings = (msgbox = true) => {
     settings['convert_to'] = $('input#convert_to').val();
     settings['convert_from_history'] = $('input#convert_from_history').val();
     settings['convert_to_history'] = $('input#convert_to_history').val();
+    settings['history_limit'] = $('select#history_limit').val();
     chrome.storage.sync.set({ 
         cointools: settings
     }, function() {
@@ -271,6 +270,20 @@ const getPriceOf = (coin, fiat) => {
     });
 }
 
+// ajax calling coinbase to return fiat conversion
+const getPriceOf_Coinbase_Fiat = (a, b) => {
+    return new Promise((resolve, reject) => {
+        let api = 'https://api.coinbase.com/v2/exchange-rates/?currency=' + a.toUpperCase();
+        fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
+            let data = result.data.rates;
+            resolve(data[b.toUpperCase()]);
+        }).catch(function(error) {
+            logit('Request failed: ' + api + ": " + error);
+            reject(error);
+        });
+    });
+}
+
 // ajax get conversion
 const getConversion = async(coin1, coin2) => {
     coin1 = coin1.toUpperCase();
@@ -292,9 +305,13 @@ const getConversion = async(coin1, coin2) => {
     }
     // both are currencies e.g. USD to CNY
     if ((!is_coin1) && (!is_coin2)) {
-        let api1 = getPriceOf1BTC(coin1);
-        let api2 = getPriceOf1BTC(coin2);
-        return await api2 / await api1;
+        try {
+            return await getPriceOf_Coinbase_Fiat(coin1, coin2);
+        } catch (e) {
+            let api1 = getPriceOf1BTC(coin1);        
+            let api2 = getPriceOf1BTC(coin2);
+            return await api2 / await api1;
+        }
     }
     // converting coin1 to fiat coin2
     if (is_coin1) {
@@ -332,6 +349,22 @@ const getCoinReport = (result, currency = '') => {
     return s;
 }
 
+// get fit report
+const getFiatReport = (result, from = '', to = '') => {
+    let s = '---------------\n';
+    let data = result.data.rates;
+    let cur = Object.keys(data);
+    let curlen = cur.length;
+    if (to == '') {
+        for (let i = 0; i < curlen; i ++) {
+            s += "1 " + from + " = " + data[cur[i]] + " " + cur[i] + "\n";
+        }
+    } else {
+        s += "1 " + from + " = " + data[to] + " " + to + "\n";            
+    }
+    return s;
+}
+
 // conversion
 const processConversion = (s) => {
     let arr = s.trim().split("\n");
@@ -356,17 +389,27 @@ const processConversion = (s) => {
             if (pat.test(a)) {
                 if (a in coinmarkcap) {
                     a = coinmarkcap[a];                    
-                }                
-                let api = 'https://api.coinmarketcap.com/v1/ticker/' + a.toLowerCase() + '/';
-                if (currency != '') {
-                    api += '?convert=' + currency;
-                }                
-                fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
-                    result = result[0];
-                    $('textarea#convert_result').append(getCoinReport(result, currency));
-                }).catch(function(error) {
-                    logit('Request failed: ' + api + ": " + error);                    
-                });                
+                }                             
+                // if it is a fiat currency
+                if (currency_array.includes(a)) {
+                    let api = 'https://api.coinbase.com/v2/exchange-rates/?currency=' + a.toUpperCase();
+                    fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
+                        $('textarea#convert_result').append(getFiatReport(result, a, currency));
+                    }).catch(function(error) {
+                        logit('Request failed: ' + api + ": " + error);                    
+                    }); 
+                } else {
+                    let api = 'https://api.coinmarketcap.com/v1/ticker/' + a.toLowerCase() + '/';
+                    if (currency != '') {
+                        api += '?convert=' + currency;
+                    }                
+                    fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
+                        result = result[0];
+                        $('textarea#convert_result').append(getCoinReport(result, currency));
+                    }).catch(function(error) {
+                        logit('Request failed: ' + api + ": " + error);                    
+                    });     
+                }           
             }
         }
     }
@@ -374,7 +417,14 @@ const processConversion = (s) => {
 
 // get history
 const getHistory = (a, b, dom) => {
-    let api = "https://min-api.cryptocompare.com/data/histoday?fsym=" + a + "&tsym=" + b + "&limit=30&e=CCCAGG";
+    let limit = $("select#history_limit").val();
+    limit = limit || 7;
+    let api;
+    if (limit <= 7) {
+        api = "https://min-api.cryptocompare.com/data/histohour?fsym=" + a + "&tsym=" + b + "&limit=" + (limit * 24) + "&e=CCCAGG";
+    } else {        
+        api = "https://min-api.cryptocompare.com/data/histoday?fsym=" + a + "&tsym=" + b + "&limit=" + limit + "&e=CCCAGG";
+    }
     logit("calling " + api);
     dom.html('<img src="images/loading.gif" />');
     $.ajax({
@@ -405,7 +455,7 @@ const getHistory = (a, b, dom) => {
                         tickColor: "#C24642",
                         labelFontColor: "#C24642",
                         titleFontColor: "#C24642",
-                        suffix: "k"
+                        suffix: ""
                     }],
                     toolTip: {
                         shared: true
@@ -508,6 +558,11 @@ document.addEventListener('DOMContentLoaded', function() {
             $("input#convert_to").val(settings['convert_to']);
             $("input#convert_from_history").val(settings['convert_from_history']);
             $("input#convert_to_history").val(settings['convert_to_history']);
+            if (settings['history_limit']) {
+                $("select#history_limit").val(settings['history_limit']);
+            } else {
+                $("select#history_limit").val("30");
+            }
             processConversion(conversion);
             //general - api https://api.coinmarketcap.com/v1/global/
             getGeneralData(currency, $('div#general_div'));
