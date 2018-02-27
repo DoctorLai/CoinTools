@@ -561,6 +561,11 @@ document.addEventListener('DOMContentLoaded', function() {
     $(function() {
         $( "#tabs" ).tabs();
     });
+    // Replace all multiline textarea's placeholder.
+    let textAreas = document.getElementsByTagName('textarea');
+    Array.prototype.forEach.call(textAreas, function(elem) {
+        elem.placeholder = elem.placeholder.replace(/\\n/g, '\n');
+    });    
     // populate currency symbols
     let currency_array_length = currency_array.length;
     for (let i = 0; i < currency_array_length; ++ i) {
