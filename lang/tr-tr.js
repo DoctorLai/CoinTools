@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_turkish = {
+	'calling': 'çağıran',
+	'request_failed': 'İstek Başarısız Oldu',
+	'response': 'Tepki',
+	'error': 'Hata',
+	'status': 'durum',		
 	'history': 'Tarihçe',
 	'text_history_data': 'Geçmiş Verileri',
 	'query': 'Sorgu',   	

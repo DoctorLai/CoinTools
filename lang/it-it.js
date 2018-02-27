@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_italian = {
+	'calling': 'chiamata',
+	'request_failed': 'Richiesta fallita',
+	'response': 'Risposta',
+	'error': 'Errore',
+	'status': 'Stato',		
 	'history': 'storia',
 	'text_history_data': 'Dati storici',
 	'query': 'domanda',   	

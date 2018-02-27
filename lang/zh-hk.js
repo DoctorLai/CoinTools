@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_traditional_chinese = {	
+	'calling': '呼叫',
+	'request_failed': '請求失敗',
+	'response': '返回',
+	'error': '錯誤',
+	'status': '狀態',		
 	'history': '歷史',
 	'text_history_data': '歷史數據',
 	'query': '詢問',  		

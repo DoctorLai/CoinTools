@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_russian = {
+	'calling': 'вызов',
+	'request_failed': 'Ошибка запроса',
+	'response': 'отклик',
+	'error': 'ошибка',
+	'status': 'Положение дел',		
 	'history': 'История',
 	'text_history_data': 'Данные истории',
 	'query': 'Запрос',

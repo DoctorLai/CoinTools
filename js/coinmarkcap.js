@@ -1559,3 +1559,21 @@ coinmarkcap['FRCT'] = 'farstcoin';
 coinmarkcap['EDT'] = 'etherdelta-token';
 coinmarkcap['DUBI'] = 'decentralized-universal-basic-income';
 coinmarkcap['DMT'] = 'dmarket';
+
+// check if x is coin
+const isCoin = (x, arr) => {
+	arr = arr || coinmarkcap;
+	x = x.toUpperCase();
+	if (x in coinmarkcap) {
+		return true;
+	}
+	x = x.toLowerCase();
+	let keys = Object.keys(arr);
+	let len = keys.length;
+	for (let i = 0; i < len; ++ i) {
+		if (x == coinmarkcap[keys[i]]) {
+			return true;
+		}
+	}
+	return false;
+}

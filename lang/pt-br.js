@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_portuguese = {
+	'calling': 'de chamada',
+	'request_failed': 'Falha na solicitação',
+	'response': 'Resposta',
+	'error': 'Erro',
+	'status': 'Status',		
 	'history': 'história',
 	'text_history_data': 'Dados da história',
 	'query': 'Inquerir',   	

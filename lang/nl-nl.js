@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_dutch = {
+	'calling': 'aanroep',
+	'request_failed': 'Verzoek mislukt',
+	'response': 'antwoord',
+	'error': 'Fout',
+	'status': 'staat',		
 	'history': 'geschiedenis',
 	'text_history_data': 'Geschiedenisgegevens',
 	'query': 'vraag',   	

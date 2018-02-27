@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_bengali = {
+	'calling': 'কলিং',
+	'request_failed': 'অনুরোধ ব্যর্থ',
+	'response': 'প্রতিক্রিয়া',
+	'error': 'এরর',
+	'status': 'অবস্থা',		
 	'history': 'ইতিহাস',
 	'text_history_data': 'ইতিহাস তথ্য',
 	'query': 'প্রশ্ন',	

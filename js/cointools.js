@@ -1,5 +1,10 @@
 'use strict';
 
+// should be either fiat or cryptocurrency symbols like BTC or bitcoin
+const isValidSymbol = (x) => {
+    return isCoin(x) || isFiat(x);
+}
+
 // save settings
 const saveSettings = (msgbox = true) => {
     let settings = {};
@@ -29,7 +34,7 @@ const getGeneralData = (currency, dom) => {
     if (currency != '') {
         api += "?convert=" + currency_upper;
     }
-    logit("calling " + api);
+    logit(get_text("calling", "calling") + " " + api);
     $.ajax({
         type: "GET",
         url: api,
@@ -84,9 +89,9 @@ const getGeneralData = (currency, dom) => {
             dom.html(s);
         },
         error: function(request, status, error) {
-            logit('Response: ' + request.responseText);
-            logit('Error: ' + error );
-            logit('Status: ' + status);
+            logit(get_text('response', 'Response') + ': ' + request.responseText);
+            logit(get_text('error', 'Error') + ': ' + error );
+            logit(get_text('status', 'Status') + ': ' + status);
         },
         complete: function(data) {
             logit(get_text("api_finished", "API Finished") + ": " + api);
@@ -102,7 +107,7 @@ const getRankingTable = (currency, dom, limit = 200) => {
     if (currency != '') {
         api += "&convert=" + currency_upper;
     }
-    logit("calling " + api);
+    logit(get_text("calling", "calling") + " " + api);
     dom.html('<img src="images/loading.gif" />');
     var up_or_down_img = function(x) {
         if (x >= 0) {
@@ -152,7 +157,7 @@ const getRankingTable = (currency, dom, limit = 200) => {
                     result = result[0];
                     alert(getCoinReport(result, currency));
                 }).catch(function(error) {
-                    logit('Request failed: ' + api + ": " + error);                    
+                    logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);                    
                 });                                 
             });            
             sorttable.makeSortable(document.getElementById("ranking"));
@@ -209,9 +214,9 @@ const getRankingTable = (currency, dom, limit = 200) => {
                     });                                       
                 },
                 error: function(request, status, error) {
-                    logit('Response: ' + request.responseText);
-                    logit('Error: ' + error );
-                    logit('Status: ' + status);
+                    logit(get_text('response', 'Response') + ': ' + request.responseText);
+                    logit(get_text('error', 'Error') + ': ' + error );
+                    logit(get_text('status', 'Status') + ': ' + status);
                     dom.html("");
                 },
                 complete: function(data) {
@@ -220,9 +225,9 @@ const getRankingTable = (currency, dom, limit = 200) => {
             });                               
         },
         error: function(request, status, error) {
-            logit('Response: ' + request.responseText);
-            logit('Error: ' + error );
-            logit('Status: ' + status);
+            logit(get_text('response', 'Response') + ': ' + request.responseText);
+            logit(get_text('error', 'Error') + ': ' + error );
+            logit(get_text('status', 'Status') + ': ' + status);
             dom.html("");
         },
         complete: function(data) {
@@ -238,7 +243,7 @@ const getPriceOfUSD = (coin) => {
         fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
             resolve(result[0].price_usd);
         }).catch(function(error) {
-            logit('Request failed: ' + api + ": " + error);
+            logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
             reject(error);
         });
     });
@@ -251,7 +256,7 @@ const getPriceOf1BTC = (currency) => {
         fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {            
             resolve(result[0]['price_' + currency.toLowerCase()]);
         }).catch(function(error) {
-            logit('Request failed: ' + api + ": " + error);
+            logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
             reject(error);
         });
     });
@@ -264,7 +269,7 @@ const getPriceOf = (coin, fiat) => {
         fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
             resolve(result[0]['price_' + fiat.toLowerCase()]);
         }).catch(function(error) {
-            logit('Request failed: ' + api + ": " + error);
+            logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
             reject(error);
         });
     });
@@ -278,7 +283,7 @@ const getPriceOf_Coinbase_Fiat = (a, b) => {
             let data = result.data.rates;
             resolve(data[b.toUpperCase()]);
         }).catch(function(error) {
-            logit('Request failed: ' + api + ": " + error);
+            logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
             reject(error);
         });
     });
@@ -374,7 +379,7 @@ const processConversion = (s) => {
             let a = pair[0].trim().toLowerCase();
             let b = pair[1].trim().toLowerCase();
             var pat = /^[a-zA-Z\-]+$/;
-            if (pat.test(a) && pat.test(b)) {
+            if (pat.test(a) && pat.test(b) && isValidSymbol(a) && isValidSymbol(b)) {
                 let dom = $('div#conversion_results');
                 let dom_id = "convert_" + removeInvalid(a) + "_" + removeInvalid(b);
                 dom.append('<div id="' + dom_id + '"> </div>');
@@ -391,14 +396,14 @@ const processConversion = (s) => {
                     a = coinmarkcap[a];                    
                 }                             
                 // if it is a fiat currency
-                if (currency_array.includes(a)) {
+                if (isFiat(a)) {
                     let api = 'https://api.coinbase.com/v2/exchange-rates/?currency=' + a.toUpperCase();
                     fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
                         $('textarea#convert_result').append(getFiatReport(result, a, currency));
                     }).catch(function(error) {
-                        logit('Request failed: ' + api + ": " + error);                    
+                        logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);                    
                     }); 
-                } else {
+                } else if (isCoin(a)) {
                     let api = 'https://api.coinmarketcap.com/v1/ticker/' + a.toLowerCase() + '/';
                     if (currency != '') {
                         api += '?convert=' + currency;
@@ -407,9 +412,34 @@ const processConversion = (s) => {
                         result = result[0];
                         $('textarea#convert_result').append(getCoinReport(result, currency));
                     }).catch(function(error) {
-                        logit('Request failed: ' + api + ": " + error);                    
+                        logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);                    
                     });     
-                }           
+                } else {
+                    logit(get_text('unknown_symbol', "Unknown Symbol") + ": " + a);
+                }         
+            }
+        } else if (pair.length == 3) {
+            let a = pair[0].trim().toUpperCase();
+            let b = pair[1].trim().toUpperCase();
+            let c = pair[2].trim().toUpperCase();
+            // e.g. 100 BTC SBD
+            if (isNumeric(a) && isValidSymbol(b) && isValidSymbol(c)) {
+                let dom = $('div#conversion_results');
+                let dom_id = "cc_" + removeInvalid(a) + "_" + removeInvalid(b) + "_" + removeInvalid(c);
+                dom.append('<div id="' + dom_id + '"> </div>');
+                getConversion(b, c).then(x => {
+                    $('div#' + dom_id).html("<h4>" + a + " " + b.toUpperCase() + " = <span class=yellow>" + (x * a) + "</span> " + c.toUpperCase() + "</h4>");
+                });
+            } else if (isNumeric(b) && isValidSymbol(a) && isValidSymbol(c)) {
+                // e.g. BTC 100 SBD
+                let dom = $('div#conversion_results');
+                let dom_id = "cc2_" + removeInvalid(a) + "_" + removeInvalid(b) + "_" + removeInvalid(c);
+                dom.append('<div id="' + dom_id + '"> </div>');
+                getConversion(a, c).then(x => {
+                    $('div#' + dom_id).html("<h4>" + (b * 1.0 / x) + " " + a.toUpperCase() + " = <span class=yellow>" + (b) + "</span> " + c.toUpperCase() + "</h4>");
+                });
+            } else {
+                logit(get_text('error', "Error") + ": " + a + ", " + b + ", " + c);
             }
         }
     }
@@ -417,6 +447,12 @@ const processConversion = (s) => {
 
 // get history
 const getHistory = (a, b, dom) => {
+    a = a.trim();
+    b = b.trim();
+    // if not valid pairs are given, then quit
+    if (!(isValidSymbol(a) && isValidSymbol(b))) {
+        return;
+    }
     let limit = $("select#history_limit").val();
     limit = limit || 7;
     let api;
@@ -425,7 +461,7 @@ const getHistory = (a, b, dom) => {
     } else {        
         api = "https://min-api.cryptocompare.com/data/histoday?fsym=" + a + "&tsym=" + b + "&limit=" + limit + "&e=CCCAGG";
     }
-    logit("calling " + api);
+    logit(get_text("calling", "calling") + " " + api);
     dom.html('<img src="images/loading.gif" />');
     $.ajax({
         type: "GET",
@@ -508,9 +544,9 @@ const getHistory = (a, b, dom) => {
             }
         },
         error: function(request, status, error) {
-            logit('Response: ' + request.responseText);
-            logit('Error: ' + error );
-            logit('Status: ' + status);
+            logit(get_text('response', 'Response') + ': ' + request.responseText);
+            logit(get_text('error', 'Error') + ': ' + error );
+            logit(get_text('status', 'Status') + ': ' + status);
             dom.html("");
         },
         complete: function(data) {
@@ -596,15 +632,30 @@ document.addEventListener('DOMContentLoaded', function() {
         let amount = $('input#amount').val();
         let a = $('input#convert_from').val();
         let b = $('input#convert_to').val();
-        if ((a != '') && (b != '') && (amount >= 0)) {
-            getConversion(a, b).then(x => {
-                $('textarea#convert_result').append(amount + " " + a.toUpperCase() + " = " + (x * amount) + " " + b.toUpperCase() + "\n");
-                let psconsole = $('textarea#convert_result');
-                if (psconsole.length) {
-                    psconsole.scrollTop(psconsole[0].scrollHeight - psconsole.height());
-                }
-                saveSettings(false);
-            });
+        if ((a != '') && (b != '')) {
+            if (amount >= 0) {
+                // this solves the equation of `x A = ? B`
+                getConversion(a, b).then(x => {
+                    $('textarea#convert_result').append(amount + " " + a.toUpperCase() + " = " + (x * amount) + " " + b.toUpperCase() + "\n");
+                    let psconsole = $('textarea#convert_result');
+                    if (psconsole.length) {
+                        psconsole.scrollTop(psconsole[0].scrollHeight - psconsole.height());
+                    }
+                    saveSettings(false);
+                });
+            } else {
+                // this solves the equation of `? A = x B`
+                getConversion(a, b).then(x => {
+                    amount = -amount;
+                    let amount2 = amount * 1.0 / x;
+                    $('textarea#convert_result').append(amount2 + " " + a.toUpperCase() + " = " + (amount) + " " + b.toUpperCase() + "\n");
+                    let psconsole = $('textarea#convert_result');
+                    if (psconsole.length) {
+                        psconsole.scrollTop(psconsole[0].scrollHeight - psconsole.height());
+                    }
+                    saveSettings(false);
+                });                
+            }
         }
     });
     // clear console

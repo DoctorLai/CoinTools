@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_simplified_chinese = {	
+	'calling': '呼叫',
+	'request_failed': '请求失败',
+	'response': '返回',
+	'error': '错误',
+	'status': '状态',
 	'history': '历史',
 	'text_history_data': '历史数据',
 	'query': '查询',

@@ -64,3 +64,8 @@ const removeInvalid = (x) => {
 const getDateString = (ts) => {
     return new Date(ts * 1000).toISOString().substring(0, 10);
 }
+
+// isnumeric
+const isNumeric = (n) => {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}

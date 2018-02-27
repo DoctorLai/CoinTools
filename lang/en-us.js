@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_english = {
+	'calling': 'Calling',
+	'request_failed': 'Request Failed',
+	'response': 'Response',
+	'error': 'Error',
+	'status': 'Status',	
 	'history': 'History',
 	'text_history_data': 'History Data',
 	'query': 'Query',
