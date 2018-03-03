@@ -48,7 +48,6 @@ let translation_italian = {
 	'application': 'Applicazione',
 	'chrome_version': 'Versione di Chrome',
 	'api_finished': 'API Finite',
-	'calling': 'chiamata',
 	'global_stats': 'Statistiche Globali',
 	'total_market_cap_usd': 'Capitalizzazione di Mercato totale USD',
 	'total_24_hour_volume_usd': 'Volume delle ultime 24 ore USD',

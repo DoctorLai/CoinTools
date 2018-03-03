@@ -48,7 +48,6 @@ let translation_russian = {
 	'application': 'Приложение',
 	'chrome_version': 'Версия Chrome',
 	'api_finished': 'API закончен',
-	'calling': 'призвание',
 	'global_stats': 'Глобальная статистика',
 	'total_market_cap_usd': 'Общая Рыночная капитализация USD',
 	'total_24_hour_volume_usd': 'Объем за 24 часа USD',

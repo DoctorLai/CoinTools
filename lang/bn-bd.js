@@ -48,7 +48,6 @@ let translation_bengali = {
 	'application': 'অ্যাপ্লিকেশন',
 	'chrome_version': 'ক্রোম ভার্সন',
 	'api_finished': 'এপিআই সমাপ্ত হয়েছে',
-	'calling': 'কলিং',
 	'global_stats': 'গ্লোবাল পরিসংখ্যান',
 	'total_market_cap_usd': 'সর্বমোট বাজার মূলধন (ইউএসডী)',
 	'total_24_hour_volume_usd': '২৪ ঘণ্টার সর্বমোট পরিমাণ (ইউএসডী)',

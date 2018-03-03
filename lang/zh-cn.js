@@ -48,7 +48,6 @@ let translation_simplified_chinese = {
 	'application': '程序',
 	'chrome_version': '浏览器版本',
 	'api_finished': 'API 调用完成',
-	'calling': '正在调用',
 	'global_stats': '市场概况',
 	'total_market_cap_usd': '所有市场总值（美元）',
 	'total_24_hour_volume_usd': '24小时内总值（美元）',

@@ -61,6 +61,7 @@ const get_lang = () => {
         case 'it-it': return (translation_italian);
         case 'bn-bd': return (translation_bengali);
         case 'ru-ru': return (translation_russian);
+        case 'ar-ar': return (translation_arabic);
     }	
 }
 

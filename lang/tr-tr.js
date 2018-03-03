@@ -48,7 +48,6 @@ let translation_turkish = {
 	'application': 'Uygulama',
 	'chrome_version': 'Chrome Versiyonu',
 	'api_finished': 'API Tamamlandı',
-	'calling': 'Aranıyor',
 	'global_stats': 'Global İstatistikler',
 	'total_market_cap_usd': 'Toplam Market Hacmi USD',
 	'total_24_hour_volume_usd': '24 saatlik Toplam Market Hacmi USD',

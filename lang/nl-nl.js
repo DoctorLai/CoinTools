@@ -48,7 +48,6 @@ let translation_dutch = {
 	'application': 'Applicatie',
 	'chrome_version': 'Chrome Versie',
 	'api_finished': 'API Voltooid',
-	'calling': 'Roeping',
 	'global_stats': 'Wereldwijde statistieken',
 	'total_market_cap_usd': 'Totale marktkapitalisatie USD',
 	'total_24_hour_volume_usd': 'Totale USD Volume over 24 uur',

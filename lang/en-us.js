@@ -48,7 +48,6 @@ let translation_english = {
 	'application': 'Application',
 	'chrome_version': 'Chrome Version',
 	'api_finished': 'API Finished',
-	'calling': 'calling',
 	'global_stats': 'Global Stats',
 	'total_market_cap_usd': 'Total Market Cap USD',
 	'total_24_hour_volume_usd': 'Total 24 Hour Volumn USD',
