@@ -40,6 +40,7 @@ const translation = (lang) => {
     translate_text($('button#btn_convert'), lang, 'convert');
     translate_text($('button#btn_history'), lang, 'query');
     translate_text($('button#btn_clear'), lang, 'clear');
+    translate_text($('button#btn_clear2'), lang, 'clear');
     translate_text($('option#source_type'), lang, 'source_type');
     translate_text($('option#target_type'), lang, 'target_type');
     translate_text($('option#source_type_crypto'), lang, 'source_type_crypto');

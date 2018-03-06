@@ -16,7 +16,7 @@ const saveSettings = (msgbox = true) => {
     settings['convert_to'] = $('input#convert_to').val();
     settings['convert_from_history'] = $('input#convert_from_history').val();
     settings['convert_to_history'] = $('input#convert_to_history').val();
-    settings['history_limit'] = $('select#history_limit').val();
+    settings['history_limit'] = $('input#history_limit').val();
     chrome.storage.sync.set({ 
         cointools: settings
     }, function() {
@@ -371,20 +371,46 @@ const getFiatReport = (result, from = '', to = '') => {
 }
 
 // conversion
-const processConversion = (s) => {
+const processConversion = (s, local_currency = '') => {
+    local_currency = local_currency.toUpperCase();
     let arr = s.trim().split("\n");
     for (let i = 0; i < arr.length; i ++) {
+        arr[i] = arr[i].trim();
+        if (arr[i].length == 0) {
+            continue
+        }
+        if ((arr[i][0] == ';') || (arr[i][0] == '#')) { // comments
+            continue;
+        }
         let pair = arr[i].split(" ");
         if (pair.length == 2) {
-            let a = pair[0].trim().toLowerCase();
-            let b = pair[1].trim().toLowerCase();
+            let a = pair[0].trim().toUpperCase();
+            let b = pair[1].trim().toUpperCase();
+            if (isNumeric(a)) {
+                if (isValidSymbol(b)) {
+                    let dom = $('div#conversion_results');
+                    let dom_id = "convert" + random_id();
+                    dom.append('<div id="' + dom_id + '"> </div>');
+                    getConversion(b, "BTC").then(x => {
+                        $('div#' + dom_id).html("<h4>" + a + " " + b +  " = <span class=yellow>" + (x * a) + "</span> " + "BTC" + "</h4>");
+                    });                    
+                    if (local_currency != '') {
+                        let dom = $('div#conversion_results');
+                        let dom_id = "convert" + random_id();
+                        dom.append('<div id="' + dom_id + '"> </div>');
+                        getConversion(b, local_currency).then(x => {
+                            $('div#' + dom_id).html("<h4>" + a + " " + b +  " = <span class=yellow>" + (x * a) + "</span> " + local_currency + "</h4>");
+                        });                                            
+                    }
+                }
+            }
             var pat = /^[a-zA-Z\-]+$/;
             if (pat.test(a) && pat.test(b) && isValidSymbol(a) && isValidSymbol(b)) {
                 let dom = $('div#conversion_results');
-                let dom_id = "convert_" + removeInvalid(a) + "_" + removeInvalid(b);
+                let dom_id = "convert" + random_id();
                 dom.append('<div id="' + dom_id + '"> </div>');
                 getConversion(a, b).then(x => {
-                    $('div#' + dom_id).html("<h4>1 " + a.toUpperCase() + " = <span class=yellow>" + x + "</span> " + b.toUpperCase() + "</h4>");
+                    $('div#' + dom_id).html("<h4>1 " + a + " = <span class=yellow>" + x + "</span> " + b + "</h4>");
                 });
             }
         } else if (pair.length == 1) {
@@ -425,18 +451,18 @@ const processConversion = (s) => {
             // e.g. 100 BTC SBD
             if (isNumeric(a) && isValidSymbol(b) && isValidSymbol(c)) {
                 let dom = $('div#conversion_results');
-                let dom_id = "cc_" + removeInvalid(a) + "_" + removeInvalid(b) + "_" + removeInvalid(c);
+                let dom_id = "convert" + random_id();
                 dom.append('<div id="' + dom_id + '"> </div>');
                 getConversion(b, c).then(x => {
-                    $('div#' + dom_id).html("<h4>" + a + " " + b.toUpperCase() + " = <span class=yellow>" + (x * a) + "</span> " + c.toUpperCase() + "</h4>");
+                    $('div#' + dom_id).html("<h4>" + a + " " + b + " = <span class=yellow>" + (x * a) + "</span> " + c + "</h4>");
                 });
             } else if (isNumeric(b) && isValidSymbol(a) && isValidSymbol(c)) {
                 // e.g. BTC 100 SBD
                 let dom = $('div#conversion_results');
-                let dom_id = "cc2_" + removeInvalid(a) + "_" + removeInvalid(b) + "_" + removeInvalid(c);
+                let dom_id = "convert" + random_id();
                 dom.append('<div id="' + dom_id + '"> </div>');
                 getConversion(a, c).then(x => {
-                    $('div#' + dom_id).html("<h4>" + (b * 1.0 / x) + " " + a.toUpperCase() + " = <span class=yellow>" + (b) + "</span> " + c.toUpperCase() + "</h4>");
+                    $('div#' + dom_id).html("<h4>" + (b * 1.0 / x) + " " + a + " = <span class=yellow>" + (b) + "</span> " + c + "</h4>");
                 });
             } else {
                 logit(get_text('error', "Error") + ": " + a + ", " + b + ", " + c);
@@ -447,16 +473,21 @@ const processConversion = (s) => {
 
 // get history
 const getHistory = (a, b, dom) => {
-    a = a.trim();
-    b = b.trim();
+    a = a.toUpperCase().trim();
+    b = b.toUpperCase().trim();
     // if not valid pairs are given, then quit
     if (!(isValidSymbol(a) && isValidSymbol(b))) {
         return;
     }
-    let limit = $("select#history_limit").val();
-    limit = limit || 7;
+    let limit = $("input#history_limit").val();
+    if (!isNumeric(limit)) {
+        limit = 30;
+    }
+    limit = parseInt(limit);
     let api;
-    if (limit <= 7) {
+    if (limit <= 3) {
+        api = "https://min-api.cryptocompare.com/data/histominute?fsym=" + a + "&tsym=" + b + "&limit=" + (limit * 24 * 60) + "&e=CCCAGG";
+    } else if (limit <= 7) {
         api = "https://min-api.cryptocompare.com/data/histohour?fsym=" + a + "&tsym=" + b + "&limit=" + (limit * 24) + "&e=CCCAGG";
     } else {        
         api = "https://min-api.cryptocompare.com/data/histoday?fsym=" + a + "&tsym=" + b + "&limit=" + limit + "&e=CCCAGG";
@@ -481,7 +512,10 @@ const getHistory = (a, b, dom) => {
                     data_high.push({x: date, y: arr[i].high});
                     data_low.push({x: date, y: arr[i].low});
                 }
-                let chart = new CanvasJS.Chart("chartContainer", {
+                let date = new Date();
+                let chart_id = "chart_" + date.toISOString().replace('-', '').replace(':', '').replace('.', '');
+                let chartdiv = $('div#chartContainerDiv').prepend('<div id="' + chart_id + '" style="height: 450px; width: 750px;"></div>');
+                let chart = new CanvasJS.Chart(chart_id, {
                     title:{
                         text: a + " => " + b
                     },
@@ -541,6 +575,8 @@ const getHistory = (a, b, dom) => {
                     }]
                 });
                 chart.render();
+            } else {
+                dom.html("");
             }
         },
         error: function(request, status, error) {
@@ -600,11 +636,11 @@ document.addEventListener('DOMContentLoaded', function() {
             $("input#convert_from_history").val(settings['convert_from_history']);
             $("input#convert_to_history").val(settings['convert_to_history']);
             if (settings['history_limit']) {
-                $("select#history_limit").val(settings['history_limit']);
+                $("input#history_limit").val(settings['history_limit']);
             } else {
-                $("select#history_limit").val("30");
+                $("input#history_limit").val("30");
             }
-            processConversion(conversion);
+            processConversion(conversion, currency);
             //general - api https://api.coinmarketcap.com/v1/global/
             getGeneralData(currency, $('div#general_div'));
             // ranking tables - api https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=2000
@@ -667,6 +703,10 @@ document.addEventListener('DOMContentLoaded', function() {
     $('button#btn_clear').click(function() {
         $('textarea#convert_result').text('');
     });
+    // clear history graph
+    $('button#btn_clear2').click(function() {
+        $('div#chartContainerDiv').html('');
+    });    
     // history data
     $('button#btn_history').click(function() {
         saveSettings(false);        

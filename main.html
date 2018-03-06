@@ -87,7 +87,8 @@
         <form class='form-inline'>
           <input type=text list='convert_from_list' class="form-control" style='width: 150px' id='convert_from_history' />
           <input type=text list='convert_to_list' class="form-control" style='width: 150px' id='convert_to_history'>
-          <select class="form-control" style='width: 150px' id="history_limit">
+          <input type=text list='convert_period_list' class="form-control" style='width: 150px' id="history_limit">
+          <datalist id='convert_period_list'>
             <option value=1>1</option>
             <option value=3>3</option>
             <option value=7>7</option>
@@ -95,14 +96,19 @@
             <option value=30>30</option>
             <option value=60>60</option>
             <option value=90>90</option>
+            <option value=120>120</option>
             <option value=180>180</option>
             <option value=240>240</option>
+            <option value=300>300</option>
             <option value=365>365</option>
-            <option value=720>720</option>            
-          </select>
+            <option value=480>480</option>
+            <option value=720>720</option>
+            <option value=1000>1000</option>
+          </datalist>
           <button type='button' class="form-control" style='width: 120px' id='btn_history'>Query</button>
+          <button type='button' class="form-control" style='width: 120px' id='btn_clear2'>Clear</button>
         </form>
-        <div id="chartContainer" style="height: 450px; width: 750px;"></div>
+        <div id="chartContainerDiv" style="height: 450px; width: 750px;"></div>
       </div>                   
       <div id="tabs-setting">
         <h4 id="text_local_currency">Local Currency</h4>
