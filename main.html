@@ -15,6 +15,8 @@
     <script src="lang/it-it.js"></script>
     <script src="lang/es-sp.js"></script>
     <script src="lang/ru-ru.js"></script>
+    <script src="lang/pl-pl.js"></script>
+    <script src="lang/de-de.js"></script>
     <script src="js/constants.js"></script>
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/canvasjs.min.js"></script>
@@ -43,6 +45,7 @@
     <div id="tabs" class='ext-window'>
       <ul>
         <li><a id="text_general" href="#tabs-general">General</a></li>
+        <li><a id="text_news" href="#tabs-news">News</a></li>
         <li><a id="text_rank" href="#tabs-rank">Rank</a></li>
         <li><a id="text_chart" href="#tabs-chart">Charts</a></li>
         <li><a id="text_tool" href="#tabs-tool">Tools</a></li>
@@ -54,7 +57,11 @@
         <div id="conversion_results" class="black"> </div>
         <h4 id="text_global_stats">Global Stats</h4>
         <div id="general_div"> </div>
-      </div>   
+      </div>  
+      <div id="tabs-news">
+        <h4 id="text_news">News</h4>
+        <div id="news_div"> </div>
+      </div>        
       <div id="tabs-rank">
         <h4 id="text_cryptocurrency_ranking_table">Cryptocurrency Ranking Table</h4>
         <div id="rank_div"> </div>
@@ -128,6 +135,8 @@
           <option value="bn-bd">বাঙালি</option>
           <option value="ru-ru">русский</option>
           <option value="ar-ar">اللغة العربية</option>
+          <option value="pl-pl">Polskie</option>
+          <option value="de-de">Deutsche</option>
         </select>
         <h4 id="text_convert">Conversion</h4>
         <textarea class="form-control" id='conversion' rows=10 style='width:100%' placeholder="100 BTC LTC\nBTC 100 ETH\nBTC\nUSD CNY\nbch JPY\nsteem-dollars\nSBD"></textarea>

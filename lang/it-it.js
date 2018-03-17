@@ -1,6 +1,7 @@
 'use strict';
 
 let translation_italian = {
+	'text_news': 'notizia',	
 	'calling': 'chiamata',
 	'request_failed': 'Richiesta fallita',
 	'response': 'Risposta',

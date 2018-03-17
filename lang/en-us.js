@@ -1,6 +1,7 @@
 'use strict';
 
 let translation_english = {
+	'text_news': 'News',
 	'calling': 'Calling',
 	'request_failed': 'Request Failed',
 	'response': 'Response',

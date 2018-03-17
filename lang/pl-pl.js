@@ -1,6 +1,7 @@
 'use strict';
 
 let translation_polish = {
+	'text_news': 'Aktualności',
 	'calling': 'Pobieranie',
 	'request_failed': 'Zapytanie nieudane',
 	'response': 'Odpowiedź',
@@ -36,12 +37,12 @@ let translation_polish = {
 	'change_7days': 'Zmiana 7 dni',
 	'convert': 'Konwertuj',
 	'alert_save': 'Ustawienia zapisane (Wymagane: Reload Extension)',
-	'text_cryptocurrency_ranking_table': 'Ranking kryptowalut',
+	'text_cryptocurrency_ranking_table': 'Tabela rankingowa',
 	'ui_language': 'Język UI',
 	'local_currency': 'Lokalna waluta',
 	'save': 'Zapisz',
 	'general': 'Ogólne',
-	'rank': 'Ranking',
+	'rank': 'Zaszeregowanie',
 	'setting': 'Ustawienia',
 	'log': 'Logi',
 	'proudly_brought_to_you_by': 'Promowane przez',

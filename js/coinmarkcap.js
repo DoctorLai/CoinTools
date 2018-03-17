@@ -41,6 +41,7 @@ coinmarkcap['NANO'] = 'nano';
 coinmarkcap['XVG'] = 'verge';
 coinmarkcap['BNB'] = 'binance-coin';
 coinmarkcap['STEEM'] = 'steem';
+coinmarkcap['SP'] = 'steem';
 coinmarkcap['BCN'] = 'bytecoin-bcn';
 coinmarkcap['PPT'] = 'populous';
 coinmarkcap['SC'] = 'siacoin';

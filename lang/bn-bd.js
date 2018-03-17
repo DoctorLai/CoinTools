@@ -1,6 +1,7 @@
 'use strict';
 
 let translation_bengali = {
+	'text_news': 'খবর',
 	'calling': 'কলিং',
 	'request_failed': 'অনুরোধ ব্যর্থ',
 	'response': 'প্রতিক্রিয়া',

@@ -1,9 +1,10 @@
 'use strict';
 
 let translation_traditional_chinese = {	
-	'calling': '呼叫',
+	'text_news': '新聞',
+	'calling': '調用',
 	'request_failed': '請求失敗',
-	'response': '返回',
+	'response': '響應',
 	'error': '錯誤',
 	'status': '狀態',		
 	'history': '歷史',

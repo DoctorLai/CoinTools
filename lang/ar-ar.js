@@ -1,6 +1,7 @@
 'use strict';
 
 let translation_arabic = {	
+	'text_news': 'أخبار',
 	'calling': 'الاتصال',
 	'request_failed': 'فشل الطلب',
 	'response': 'الرد',

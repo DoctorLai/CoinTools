@@ -1,6 +1,7 @@
 'use strict';
 
 let translation_dutch = {
+	'text_news': 'Nieuws',	
 	'calling': 'aanroep',
 	'request_failed': 'Verzoek mislukt',
 	'response': 'antwoord',

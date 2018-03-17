@@ -26,6 +26,42 @@ const saveSettings = (msgbox = true) => {
     });
 }
 
+// get news and articles
+const getFeed = (dom) => {
+    let api = "https://min-api.cryptocompare.com/data/news/?lang=EN";
+    logit(get_text("calling", "calling") + " " + api);
+    $.ajax({
+        type: "GET",
+        url: api,
+        success: function(result) {
+            let s = '<ol>';
+            let len = result.length;
+            for (let i = 0; i < len; ++ i) {
+                s += "<li>";
+                s += ": <a target=_blank href='" + result[i]['url'] + "'>"; 
+                s += result[i]['title'];
+                s += "<BR/><img style='height:100px' src='" + result[i]['imageurl'];
+                s += "' /></a>";
+                s += "<i>" + timestampToString(result[i]['published_on']) + "</i>";
+                s += "<blockquote>";
+                s += result[i]['body'];
+                s += "</blockquote>";
+                s += "</li>";
+            }
+            s += "</ol>";
+            dom.html(s);
+        },
+        error: function(request, status, error) {
+            logit(get_text('response', 'Response') + ': ' + request.responseText);
+            logit(get_text('error', 'Error') + ': ' + error );
+            logit(get_text('status', 'Status') + ': ' + status);
+        },
+        complete: function(data) {
+            logit(get_text("api_finished", "API Finished") + ": " + api);
+        }             
+    }); 
+}
+
 // general data from coinmarkcap
 const getGeneralData = (currency, dom) => {
     let currency_upper = currency.toUpperCase();
@@ -503,6 +539,7 @@ const getHistory = (a, b, dom) => {
                 let data_close = [];
                 let data_high = [];
                 let data_low = [];
+                let data_mid = [];
                 let arr = data.Data;
                 let datalen = arr.length;
                 for (let i = 0; i < datalen; ++ i) {
@@ -511,6 +548,7 @@ const getHistory = (a, b, dom) => {
                     data_close.push({x: date, y: arr[i].close});
                     data_high.push({x: date, y: arr[i].high});
                     data_low.push({x: date, y: arr[i].low});
+                    data_mid.push({x: date, y: (arr[i].high + arr[i].low) * 0.5});
                 }
                 let date = new Date();
                 let chart_id = "chart_" + date.toISOString().replace('-', '').replace(':', '').replace('.', '');
@@ -546,7 +584,8 @@ const getHistory = (a, b, dom) => {
                         name: "Open",
                         color: "#369EAD",
                         showInLegend: true,
-                        axisYIndex: 1,
+                        visible: false,
+                        axisYIndex: 0,
                         dataPoints: data_open
                     },
                     {
@@ -554,6 +593,7 @@ const getHistory = (a, b, dom) => {
                         name: "Close",
                         color: "#C24642",
                         axisYIndex: 0,
+                        visible: false,
                         showInLegend: true,
                         dataPoints: data_close
                     },
@@ -561,6 +601,7 @@ const getHistory = (a, b, dom) => {
                         type: "line",
                         name: "Low",
                         color: "blue",
+                        visible: false,
                         axisYIndex: 0,
                         showInLegend: true,
                         dataPoints: data_low
@@ -569,9 +610,18 @@ const getHistory = (a, b, dom) => {
                         type: "line",
                         name: "High",
                         color: "#7F6084",
-                        axisYType: "secondary",
+                        axisYIndex: 0,
+                        visible: false,
                         showInLegend: true,
                         dataPoints: data_high
+                    },                    
+                    {
+                        type: "line",
+                        name: "Average",
+                        color: "black",
+                        axisYIndex: 0,
+                        showInLegend: true,
+                        dataPoints: data_mid
                     }]
                 });
                 chart.render();
@@ -716,4 +766,14 @@ document.addEventListener('DOMContentLoaded', function() {
             getHistory(a, b, $('div#chartContainer'));            
         }        
     });
+    // calling history of last settings
+    setTimeout(function () {
+        let a = $('input#convert_from_history').val();
+        let b = $('input#convert_to_history').val();
+        if ((a != '') && (b != '')) {
+            getHistory(a, b, $('div#chartContainer'));            
+        }        
+    }, 100);
+    // get news and articles
+    getFeed($('div#news_div'));
 }, false);

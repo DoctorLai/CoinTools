@@ -1,6 +1,7 @@
 'use strict';
 
 let translation_turkish = {
+	'text_news': 'Haber',	
 	'calling': 'çağıran',
 	'request_failed': 'İstek Başarısız Oldu',
 	'response': 'Tepki',

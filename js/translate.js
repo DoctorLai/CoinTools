@@ -22,6 +22,8 @@ const translation = (lang) => {
     translate_text($('a#text_rank'), lang, 'rank');
     translate_text($('a#text_setting'), lang, 'setting');
     translate_text($('a#text_log'), lang, 'log');
+    translate_text($('a#text_news'), lang, 'text_news');
+    translate_text($('h4#text_news'), lang, 'text_news');
     translate_text($('h4#text_global_stats'), lang, 'global_stats');   
     translate_text($('h4#text_local_currency'), lang, 'local_currency');
     translate_text($('h4#text_ui_language'), lang, 'ui_language');
@@ -63,6 +65,8 @@ const get_lang = () => {
         case 'bn-bd': return (translation_bengali);
         case 'ru-ru': return (translation_russian);
         case 'ar-ar': return (translation_arabic);
+        case 'pl-pl': return (translation_polish);
+        case 'de-de': return (translation_german);
     }	
 }
 

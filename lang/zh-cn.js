@@ -1,6 +1,7 @@
 'use strict';
 
 let translation_simplified_chinese = {	
+	'text_news': '新闻',	
 	'calling': '呼叫',
 	'request_failed': '请求失败',
 	'response': '返回',

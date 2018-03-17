@@ -1,6 +1,7 @@
 'use strict';
 
 let translation_russian = {
+	'text_news': 'Новости',	
 	'calling': 'вызов',
 	'request_failed': 'Ошибка запроса',
 	'response': 'отклик',
