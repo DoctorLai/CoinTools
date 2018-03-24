@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_dutch = {
+	'exchange_center': 'Exchange Center',
+	'cryptocurrency': 'cryptogeld',
+	'volume24h': '24 uur volume',
+	'symbol': 'Symbool',	
+	'text_pairs': 'Top paren',	
 	'text_news': 'Nieuws',	
 	'calling': 'aanroep',
 	'request_failed': 'Verzoek mislukt',

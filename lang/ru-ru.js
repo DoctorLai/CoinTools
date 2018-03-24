@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_russian = {
+	'exchange_center': 'Обменный центр',
+	'cryptocurrency': 'криптовалюта',
+	'volume24h': '24-часовой объем',
+	'symbol': 'Символ',	
+	'text_pairs': 'Верхние пары',	
 	'text_news': 'Новости',	
 	'calling': 'вызов',
 	'request_failed': 'Ошибка запроса',

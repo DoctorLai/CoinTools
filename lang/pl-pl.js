@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_polish = {
+	'exchange_center': 'Centrum wymiany',
+	'cryptocurrency': 'Kryptowaluta',
+	'volume24h': '24-godzinna objętość',
+	'symbol': 'Symbol',	
+	'text_pairs': 'Najlepsze pary',		
 	'text_news': 'Aktualności',
 	'calling': 'Pobieranie',
 	'request_failed': 'Zapytanie nieudane',

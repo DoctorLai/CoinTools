@@ -1,6 +1,11 @@
 'use strict';
 
-let translation_simplified_chinese = {	
+let translation_simplified_chinese = {
+	'exchange_center': '交易所',
+	'cryptocurrency': '虚拟货币',
+	'volume24h': '24小时交易量',
+	'symbol': '符号',	
+	'text_pairs': '配对',
 	'text_news': '新闻',	
 	'calling': '呼叫',
 	'request_failed': '请求失败',

@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_german = {	
+	'exchange_center': 'Exchange-Center',
+	'cryptocurrency': 'Kryptowährung',
+	'volume24h': '24 Stunden Lautstärke',
+	'symbol': 'Symbol',	
+	'text_pairs': 'Top-Paare',	
 	'text_news': 'Nachrichten',
 	'calling': 'Einberufung',
 	'request_failed': 'Anfrage fehlgeschlagen',

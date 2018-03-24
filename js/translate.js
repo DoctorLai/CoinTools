@@ -32,6 +32,8 @@ const translation = (lang) => {
 	translate_text($('span#proudly_brought_to_you_by'), lang, 'proudly_brought_to_you_by');
 	translate_text($('h4#text_convert'), lang, 'convert');
 	translate_text($('a#text_chart'), lang, 'chart');
+    translate_text($('a#text_pairs'), lang, 'text_pairs');
+    translate_text($('h4#text_pairs'), lang, 'text_pairs');
 	translate_text($('h4#text_total_market_cap_usd'), lang, 'total_market_cap_usd');
     translate_text($('h4#text_total_market_cap_usd_24'), lang, 'total_market_cap_24_usd');
     translate_text($('option#text_select_a_currency'), lang, 'text_select_a_currency');
@@ -41,8 +43,10 @@ const translation = (lang) => {
     translate_text($('h4#text_history_data'), lang, 'text_history_data');
     translate_text($('button#btn_convert'), lang, 'convert');
     translate_text($('button#btn_history'), lang, 'query');
+    translate_text($('button#btn_pairs_history'), lang, 'query');
     translate_text($('button#btn_clear'), lang, 'clear');
     translate_text($('button#btn_clear2'), lang, 'clear');
+    translate_text($('button#btn_pairs_clear2'), lang, 'clear');    
     translate_text($('option#source_type'), lang, 'source_type');
     translate_text($('option#target_type'), lang, 'target_type');
     translate_text($('option#source_type_crypto'), lang, 'source_type_crypto');
@@ -67,6 +71,8 @@ const get_lang = () => {
         case 'ar-ar': return (translation_arabic);
         case 'pl-pl': return (translation_polish);
         case 'de-de': return (translation_german);
+        case 'ro-ro': return (translation_romanian);
+        case 'fl-ph': return (translation_filipino);
     }	
 }
 

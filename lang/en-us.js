@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_english = {
+	'exchange_center': 'Exchange',
+	'cryptocurrency': 'Cryptocurrency',
+	'volume24h': '24 Hour Volume',
+	'symbol': 'Symbol',	
+	'text_pairs': 'Top Pairs',	
 	'text_news': 'News',
 	'calling': 'Calling',
 	'request_failed': 'Request Failed',

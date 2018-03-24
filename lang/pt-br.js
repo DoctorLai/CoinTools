@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_portuguese = {
+	'exchange_center': 'Central do Exchange',
+	'cryptocurrency': 'Criptomoeda',
+	'volume24h': '24 horas de volume',
+	'symbol': 'Símbolo',	
+	'text_pairs': 'Pares superiores',	
 	'text_news': 'Notícia',	
 	'calling': 'de chamada',
 	'request_failed': 'Falha na solicitação',

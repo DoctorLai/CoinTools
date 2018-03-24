@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_bengali = {
+	'exchange_center': 'এক্সচেঞ্জ কেন্দ্র',
+	'cryptocurrency': '虚拟货币',
+	'volume24h': '24 ঘন্টা ভলিউম',
+	'symbol': 'প্রতীক',	
+	'text_pairs': 'শীর্ষ জোড়া',	
 	'text_news': 'খবর',
 	'calling': 'কলিং',
 	'request_failed': 'অনুরোধ ব্যর্থ',

@@ -16,7 +16,9 @@
     <script src="lang/es-sp.js"></script>
     <script src="lang/ru-ru.js"></script>
     <script src="lang/pl-pl.js"></script>
-    <script src="lang/de-de.js"></script>
+    <script src="lang/de-de.js"></script>    
+    <script src="lang/ro-ro.js"></script>    
+    <script src="lang/fl-ph.js"></script>    
     <script src="js/constants.js"></script>
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/canvasjs.min.js"></script>
@@ -50,6 +52,7 @@
         <li><a id="text_chart" href="#tabs-chart">Charts</a></li>
         <li><a id="text_tool" href="#tabs-tool">Tools</a></li>
         <li><a id="text_history" href="#tabs-history">History</a></li>
+        <li><a id="text_pairs" href="#tabs-pairs">Pairs</a></li>
         <li><a id="text_setting" href="#tabs-setting">Setting</a></li>
         <li><a id="text_log" href="#tabs-log">Log</a></li>        
       </ul>
@@ -115,8 +118,20 @@
           <button type='button' class="form-control" style='width: 120px' id='btn_history'>Query</button>
           <button type='button' class="form-control" style='width: 120px' id='btn_clear2'>Clear</button>
         </form>
+        <div id="chartContainer"> </div>
         <div id="chartContainerDiv" style="height: 450px; width: 750px;"></div>
-      </div>                   
+      </div>  
+      <div id="tabs-pairs">
+        <h4 id="text_pairs">Top Pairs</h4>
+        <form class='form-inline'>
+          <input type=text list='convert_from_list' class="form-control" style='width: 150px' id='pairs_id' />
+          <button type='button' class="form-control" style='width: 120px' id='btn_pairs_history'>Query</button>
+          <button type='button' class="form-control" style='width: 120px' id='btn_pairs_clear2'>Clear</button>
+        </form>
+        <BR/>
+        <div id="pairs_gif"> </div>
+        <div id="pairs_div" style='width:750px; height: 450px'> </div>
+      </div>                         
       <div id="tabs-setting">
         <h4 id="text_local_currency">Local Currency</h4>
         <select class="form-control" id="currency">    
@@ -137,6 +152,8 @@
           <option value="ar-ar">اللغة العربية</option>
           <option value="pl-pl">Polskie</option>
           <option value="de-de">Deutsche</option>
+          <option value="ro-ro">Română</option>
+          <option value="fl-ph">Filipineză</option>
         </select>
         <h4 id="text_convert">Conversion</h4>
         <textarea class="form-control" id='conversion' rows=10 style='width:100%' placeholder="100 BTC LTC\nBTC 100 ETH\nBTC\nUSD CNY\nbch JPY\nsteem-dollars\nSBD"></textarea>

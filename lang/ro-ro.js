@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_romanian = {
+	'exchange_center': 'Centrul de schimburi',
+	'cryptocurrency': 'Criptomonedă',
+	'volume24h': 'Volum de 24 de ore',
+	'symbol': 'Simbol',	
+	'text_pairs': 'Perechi de top',	
 	'text_news': 'Știri',
 	'calling': 'Apelează',
 	'request_failed': 'Solicitare eșuată',
@@ -38,7 +43,7 @@ let translation_romanian = {
 	'convert': 'Schimbă',
 	'alert_save': 'Setări salvate (Necesar: Reincarcă extensia)',
 	'text_cryptocurrency_ranking_table': 'Tabel clasament Cryptocurrency',
-	'ui_language': 'Limbă UI'
+	'ui_language': 'Limbă UI',
 	'local_currency': 'Monedă locală',
 	'save': 'Salvează',
 	'general': 'General',

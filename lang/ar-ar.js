@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_arabic = {	
+	'exchange_center': 'مركز التبادل',
+	'cryptocurrency': 'عملة معماة',
+	'volume24h': 'حجم 24 ساعة',
+	'symbol': 'رمز',	
+	'text_pairs': 'أزواج أعلى',	
 	'text_news': 'أخبار',
 	'calling': 'الاتصال',
 	'request_failed': 'فشل الطلب',

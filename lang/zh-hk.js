@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_traditional_chinese = {	
+	'exchange_center': '交易所',
+	'cryptocurrency': '虛擬貨幣',
+	'volume24h': '24小時交易量',
+	'symbol': '符號',	
+	'text_pairs': '配對',	
 	'text_news': '新聞',
 	'calling': '調用',
 	'request_failed': '請求失敗',

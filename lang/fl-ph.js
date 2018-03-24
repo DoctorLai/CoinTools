@@ -1,6 +1,11 @@
 'use strict';
 
-let translation_english = {
+let translation_filipino = {
+	'exchange_center': 'Exchange Center',
+	'cryptocurrency': 'Cryptocurrency',
+	'volume24h': '24 Oras na Dami',
+	'symbol': 'Simbolo',	
+	'text_pairs': 'Mga nangungunang pares',	
 	'text_news': 'Balita',
 	'calling': 'Tumatawag',
 	'request_failed': 'Ang iyon Request ay nag-failed',

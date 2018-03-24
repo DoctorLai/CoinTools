@@ -17,6 +17,7 @@ const saveSettings = (msgbox = true) => {
     settings['convert_from_history'] = $('input#convert_from_history').val();
     settings['convert_to_history'] = $('input#convert_to_history').val();
     settings['history_limit'] = $('input#history_limit').val();
+    settings['pairs_id'] = $('input#pairs_id').val();
     chrome.storage.sync.set({ 
         cointools: settings
     }, function() {
@@ -508,7 +509,7 @@ const processConversion = (s, local_currency = '') => {
 }
 
 // get history
-const getHistory = (a, b, dom) => {
+const getHistory = (a, b, dom, dom2) => {
     a = a.toUpperCase().trim();
     b = b.toUpperCase().trim();
     // if not valid pairs are given, then quit
@@ -552,7 +553,7 @@ const getHistory = (a, b, dom) => {
                 }
                 let date = new Date();
                 let chart_id = "chart_" + date.toISOString().replace('-', '').replace(':', '').replace('.', '');
-                let chartdiv = $('div#chartContainerDiv').prepend('<div id="' + chart_id + '" style="height: 450px; width: 750px;"></div>');
+                let chartdiv = dom2.prepend('<div id="' + chart_id + '" style="height: 450px; width: 750px;"></div>');
                 let chart = new CanvasJS.Chart(chart_id, {
                     title:{
                         text: a + " => " + b
@@ -625,18 +626,70 @@ const getHistory = (a, b, dom) => {
                     }]
                 });
                 chart.render();
-            } else {
-                dom.html("");
             }
         },
         error: function(request, status, error) {
             logit(get_text('response', 'Response') + ': ' + request.responseText);
             logit(get_text('error', 'Error') + ': ' + error );
-            logit(get_text('status', 'Status') + ': ' + status);
-            dom.html("");
+            logit(get_text('status', 'Status') + ': ' + status);            
         },
         complete: function(data) {
             logit(get_text("api_finished", "API Finished") + ": " + api);
+            dom.html("");
+        }             
+    });     
+}
+
+// get top pairs
+const getPairs = (a, dom, dom2) => {
+    a = a.toUpperCase().trim();
+    // if not valid pairs are given, then quit
+    if (!isCoin(a)) {
+        return;
+    }
+    let api = "https://min-api.cryptocompare.com/data/top/pairs?fsym=" + a + "&limit=100";
+    logit(get_text("calling", "calling") + " " + api);
+    dom.html('<img src="images/loading.gif" />');
+    $.ajax({
+        type: "GET",
+        url: api,
+        success: function(data) {
+            if (data && data.Data && data.Response == 'Success') {
+                let s = '';
+                let date = new Date();
+                let div_id = "pairs_div_" + date.toISOString().replace('-', '').replace(':', '').replace('.', '');
+                s += '<table id="' + div_id + '" class="sortable">';
+                s += '<thead><tr>';
+                s += '<th>' + get_text('exchange_center', 'Exchange') + '</th>';
+                s += '<th>' + get_text('cryptocurrency', 'Cryptocurrency') + '</th>';
+                s += '<th>' + get_text('volume24h', 'Volume 24 Hrs') + '</th>';
+                s += '<th>' + get_text('symbol', 'Symbol') + '</th>';
+                s += '<th>' + get_text('volume24h', 'Volume 24 Hrs') + '</th>';
+                s += '</tr></thead><tbody>';        
+                let result = data.Data;    
+                for (let i = 0; i < result.length; i ++) {
+                    s += '<tr>';
+                    s += '<td>' + result[i]['exchange'] + '</td>';
+                    s += '<td>' + result[i]['fromSymbol'] + '</td>';
+                    s += '<td>' + result[i]['volume24h'].toFixed(3) + '</td>';
+                    s += '<td>' + result[i]['toSymbol'] + '</td>';
+                    s += '<td>' + result[i]['volume24hTo'].toFixed(3) + '</td>';                                       
+                    s += '</tr>';
+                }
+                s += '</tbody>';
+                s += '</table><BR/>';      
+                dom2.prepend(s);
+                sorttable.makeSortable(document.getElementById(div_id));
+            } 
+        },
+        error: function(request, status, error) {
+            logit(get_text('response', 'Response') + ': ' + request.responseText);
+            logit(get_text('error', 'Error') + ': ' + error );
+            logit(get_text('status', 'Status') + ': ' + status);            
+        },
+        complete: function(data) {
+            logit(get_text("api_finished", "API Finished") + ": " + api);
+            dom.html("");
         }             
     });     
 }
@@ -685,6 +738,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $("input#convert_to").val(settings['convert_to']);
             $("input#convert_from_history").val(settings['convert_from_history']);
             $("input#convert_to_history").val(settings['convert_to_history']);
+            $("input#pairs_id").val(settings['pairs_id']);
             if (settings['history_limit']) {
                 $("input#history_limit").val(settings['history_limit']);
             } else {
@@ -763,7 +817,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let a = $('input#convert_from_history').val();
         let b = $('input#convert_to_history').val();
         if ((a != '') && (b != '')) {
-            getHistory(a, b, $('div#chartContainer'));            
+            getHistory(a, b, $('div#chartContainer'), $('div#chartContainerDiv'));            
         }        
     });
     // calling history of last settings
@@ -771,9 +825,28 @@ document.addEventListener('DOMContentLoaded', function() {
         let a = $('input#convert_from_history').val();
         let b = $('input#convert_to_history').val();
         if ((a != '') && (b != '')) {
-            getHistory(a, b, $('div#chartContainer'));            
+            getHistory(a, b, $('div#chartContainer'), $('div#chartContainerDiv'));            
         }        
     }, 100);
+    // top pairs
+    $('button#btn_pairs_history').click(function() {
+        saveSettings(false);        
+        let a = $('input#pairs_id').val();
+        if (isCoin(a)) {
+            getPairs(a, $('div#pairs_gif'), $('div#pairs_div'));            
+        }        
+    });
+    // clear top pairs
+    $('button#btn_pairs_clear2').click(function() {
+        $('div#pairs_div').html('');
+    });     
+    // calling top pairs of last settings
+    setTimeout(function () {
+        let a = $('input#pairs_id').val();
+        if (isCoin(a)) {
+            getPairs(a, $('div#pairs_gif'), $('div#pairs_div'));
+        }        
+    }, 100);    
     // get news and articles
     getFeed($('div#news_div'));
 }, false);

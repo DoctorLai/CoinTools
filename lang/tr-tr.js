@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_turkish = {
+	'exchange_center': 'Değişim merkezi',
+	'cryptocurrency': 'Cryptocurrency',
+	'volume24h': '24 Saat Hacim',
+	'symbol': 'sembol',	
+	'text_pairs': 'En iyi çiftler',	
 	'text_news': 'Haber',	
 	'calling': 'çağıran',
 	'request_failed': 'İstek Başarısız Oldu',
