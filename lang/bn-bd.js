@@ -2,7 +2,7 @@
 
 let translation_bengali = {
 	'exchange_center': 'এক্সচেঞ্জ কেন্দ্র',
-	'cryptocurrency': '虚拟货币',
+	'cryptocurrency': 'ভার্চুয়াল মুদ্রা',
 	'volume24h': '24 ঘন্টা ভলিউম',
 	'symbol': 'প্রতীক',	
 	'text_pairs': 'শীর্ষ জোড়া',	
