@@ -137,22 +137,20 @@ const getGeneralData = (currency, dom) => {
 }
 
 // get ranking table from coinmarketcap
-const getRankingTable = (currency, dom, limit = 200) => {
+const getRankingTable = (currency, dom, keyword = "", limit = 200) => {
     let currency_upper = currency.toUpperCase();
     let currency_lower = currency.toLowerCase();
+    keyword = keyword.trim().toLowerCase();
+    if (keyword.length > 0) {
+        // search a coin
+        limit = 99999; 
+    }
     let api = "https://api.coinmarketcap.com/v1/ticker/?limit=" + limit;
     if (currency != '') {
         api += "&convert=" + currency_upper;
     }
     logit(get_text("calling", "calling") + " " + api);
     dom.html('<img src="images/loading.gif" />');
-    var up_or_down_img = function(x) {
-        if (x >= 0) {
-            return "📈" + x;
-        } else {
-            return "📉" + x;
-        }
-    }
     $.ajax({
         type: "GET",
         url: api,
@@ -169,6 +167,14 @@ const getRankingTable = (currency, dom, limit = 200) => {
             s += '<th>' + get_text('last_updated', 'Last Updated') + '</th>';
             s += '</tr></thead><tbody>';            
             for (let i = 0; i < result.length; i ++) {
+                if (keyword.length > 0) {
+                    let id = result[i]['id'].toLowerCase();
+                    let name = result[i]['name'].toLowerCase();
+                    let symbol = result[i]['symbol'].toLowerCase();
+                    if (!(id.includes(keyword) || name.includes(keyword) || symbol.includes(keyword) )) {
+                        continue;
+                    }
+                }
                 s += '<tr>';
                 s += '<td><button coin="' + result[i]['id'] + '" class="crypto">' + result[i]['name'] + ' (' + result[i]['symbol'] + ')</button></td>';
                 s += '<td>' + result[i]['price_usd'] + '</td>';
@@ -452,6 +458,7 @@ const processConversion = (s, local_currency = '') => {
             }
         } else if (pair.length == 1) {
             let a = pair[0].trim().toUpperCase();
+            let b = a;
             let currency = $('select#currency').val();
             var pat = /^[a-zA-Z\-]+$/;
             if (pat.test(a)) {
@@ -474,6 +481,14 @@ const processConversion = (s, local_currency = '') => {
                     fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
                         result = result[0];
                         $('textarea#convert_result').append(getCoinReport(result, currency));
+                        let change_7d = result['percent_change_7d'];
+                        let change_24h = result['percent_change_24h'];
+                        let change_1h = result['percent_change_1h'];
+                        let dom = $('div#conversion_results');
+                        let change24h = up_or_down_img(change_24h, 'span', get_text("change_24hr", "24 hrs"));
+                        let change1h = up_or_down_img(change_1h, 'span', get_text("change_1hr", "1 hr"));
+                        let change7d = up_or_down_img(change_7d, 'span', get_text("change_7days", "7 days"));                        
+                        dom.append("<h4>" + b + " " + change1h + " " + change24h + " " + change7d + "</h4>");
                     }).catch(function(error) {
                         logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);                    
                     });     
@@ -849,4 +864,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 100);    
     // get news and articles
     getFeed($('div#news_div'));
+    // search while you type
+    $('input#ranking_search_id').on("keyup", function() {
+        getRankingTable("", $('div#rank_div'), this.value);
+    });
 }, false);

@@ -77,3 +77,18 @@ const random_id = () => {
     };
     return "_" + (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
 }
+
+const up_or_down_img = (x, elem = 'div', text = '') => {
+    if (x > 0.5) {
+        //return "📈" + x;
+        return "<" + elem + " class='upupup'>+" + x + "%<sub class='sub'>" + text + "</sub></" + elem + ">";
+    } else if (x < -0.5) {
+        //return "📉" + x;
+        return "<" + elem + " class='downdowndown'>" + x + "%<sub class='sub'>" + text + "</sub></" + elem + ">";
+    } else {
+        if (x >= 0) {
+            return "<" + elem + " class='normal'>+" + x + "%<sub class='sub'>" + text + "</sub></" + elem + ">";
+        }
+        return "<" + elem + " class='normal'>" + x + "%<sub class='sub'>" + text + "</sub></" + elem + ">";
+    }
+}

@@ -66,3 +66,30 @@ table.sortable tbody tr:nth-child(2n+1) td {
 table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
     content: " \25B4\25BE" 
 }
+
+.upupup {
+  background: red;
+  color: yellow;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.downdowndown {
+  background: green;
+  color: white;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.normal {
+  background: gray;
+  color: black;
+  width: 100%;
+  border-radius: 5px;  
+}
+
+.sub {
+  color: white;
+  font-size: 10px;
+  font-style: italic;
+}
