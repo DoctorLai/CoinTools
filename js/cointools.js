@@ -18,6 +18,7 @@ const saveSettings = (msgbox = true) => {
     settings['convert_to_history'] = $('input#convert_to_history').val();
     settings['history_limit'] = $('input#history_limit').val();
     settings['pairs_id'] = $('input#pairs_id').val();
+    settings['ranking_search'] = $('input#ranking_search_id').val();
     chrome.storage.sync.set({ 
         cointools: settings
     }, function() {
@@ -137,7 +138,7 @@ const getGeneralData = (currency, dom) => {
 }
 
 // get ranking table from coinmarketcap
-const getRankingTable = (currency, dom, keyword = "", limit = 200) => {
+const getRankingTable = (currency, dom, keyword = "", limit = 300) => {
     let currency_upper = currency.toUpperCase();
     let currency_lower = currency.toLowerCase();
     keyword = keyword.trim().toLowerCase();
@@ -754,6 +755,10 @@ document.addEventListener('DOMContentLoaded', function() {
             $("input#convert_from_history").val(settings['convert_from_history']);
             $("input#convert_to_history").val(settings['convert_to_history']);
             $("input#pairs_id").val(settings['pairs_id']);
+            $("input#ranking_search_id").val(settings['ranking_search']);
+            if (settings['ranking_search']) {
+                getRankingTable("", $('div#rank_div'), $("input#ranking_search_id").val());
+            }
             if (settings['history_limit']) {
                 $("input#history_limit").val(settings['history_limit']);
             } else {
@@ -776,8 +781,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // about
         let manifest = chrome.runtime.getManifest();    
         let app_name = manifest.name + " v" + manifest.version;
+        let about = '';
         // version number
-        $('textarea#about').val(get_text('application', 'Application') + ': ' + app_name + '\n' + get_text('chrome_version', 'Chrome Version') + ': ' + getChromeVersion());        
+        about += get_text('application', 'Application') + ': ' + app_name + '\n' + get_text('chrome_version', 'Chrome Version') + ': ' + getChromeVersion();
+        // credits
+        about += "\n" + "API Credit: https://min-api.cryptocompare.com/";
+        about += "\n" + "API Credit: https://www.coinbase.com/join/59f21412b8770300d98bd9a5";
+        about += "\n" + "API Credit: https://coinmarketcap.com/api/\n";
+        // render
+        $('textarea#about').val(about);
         // translate
         ui_translate();
     });
@@ -866,6 +878,7 @@ document.addEventListener('DOMContentLoaded', function() {
     getFeed($('div#news_div'));
     // search while you type
     $('input#ranking_search_id').on("keyup", function() {
+        saveSettings(false);
         getRankingTable("", $('div#rank_div'), this.value);
     });
 }, false);
