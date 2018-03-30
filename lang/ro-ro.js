@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_romanian = {
+	'open': 'Preț deschis',
+	'close': 'Închideți prețul',
+	'high': 'Preț mare',
+	'low': 'Preț scăzut',
+	'average': 'Prețul mediu',	
 	'exchange_center': 'Centrul de schimburi',
 	'cryptocurrency': 'Criptomonedă',
 	'volume24h': 'Volum de 24 de ore',

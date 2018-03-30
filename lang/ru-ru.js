@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_russian = {
+	'open': 'Открытая цена',
+	'close': 'Закрыть',
+	'high': 'Высокая цена',
+	'low': 'Низкая цена',
+	'average': 'Средняя цена',	
 	'exchange_center': 'Обменный центр',
 	'cryptocurrency': 'криптовалюта',
 	'volume24h': '24-часовой объем',

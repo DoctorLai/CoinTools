@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_turkish = {
+	'open': 'Açık Fiyat',
+	'close': 'Fiyatı Kapat',
+	'high': 'Yüksek fiyat',
+	'low': 'Düşük fiyat',
+	'average': 'Ortalama fiyat',	
 	'exchange_center': 'Değişim merkezi',
 	'cryptocurrency': 'Cryptocurrency',
 	'volume24h': '24 Saat Hacim',

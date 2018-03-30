@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_simplified_chinese = {
+	'open': '开盘价',
+	'close': '结束价',
+	'high': '最高价',
+	'low': '最低价',
+	'average': '平均价',	
 	'exchange_center': '交易所',
 	'cryptocurrency': '虚拟货币',
 	'volume24h': '24小时交易量',

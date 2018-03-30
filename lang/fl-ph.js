@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_filipino = {
+	'open': 'Buksan ang Presyo',
+	'close': 'Isara ang Presyo',
+	'high': 'Mataas na presyo',
+	'low': 'Mababa ang presyo',
+	'average': 'Average na Presyo',	
 	'exchange_center': 'Exchange Center',
 	'cryptocurrency': 'Cryptocurrency',
 	'volume24h': '24 Oras na Dami',

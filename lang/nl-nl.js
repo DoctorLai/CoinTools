@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_dutch = {
+	'open': 'Open prijs',
+	'close': 'Prijs sluiten',
+	'high': 'Hoge prijs',
+	'low': 'Lage prijs',
+	'average': 'Gemiddelde prijs',	
 	'exchange_center': 'Exchange Center',
 	'cryptocurrency': 'cryptogeld',
 	'volume24h': '24 uur volume',

@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_german = {	
+	'open': 'Offener Preis',
+	'close': 'Preis schließen',
+	'high': 'Hoher Preis',
+	'low': 'Niedriger Preis',
+	'average': 'Durchschnittspreis',	
 	'exchange_center': 'Exchange-Center',
 	'cryptocurrency': 'Kryptowährung',
 	'volume24h': '24 Stunden Lautstärke',

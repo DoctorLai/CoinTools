@@ -597,8 +597,8 @@ const getHistory = (a, b, dom, dom2) => {
                     },
                     data: [{
                         type: "line",
-                        name: "Open",
-                        color: "#369EAD",
+                        name: get_text("open", "Open"),
+                        color: "orange",
                         showInLegend: true,
                         visible: false,
                         axisYIndex: 0,
@@ -606,8 +606,8 @@ const getHistory = (a, b, dom, dom2) => {
                     },
                     {
                         type: "line",
-                        name: "Close",
-                        color: "#C24642",
+                        name: get_text("close", "Close"),
+                        color: "black",
                         axisYIndex: 0,
                         visible: false,
                         showInLegend: true,
@@ -615,26 +615,26 @@ const getHistory = (a, b, dom, dom2) => {
                     },
                     {
                         type: "line",
-                        name: "Low",
+                        name: get_text("low", "Low"),
                         color: "blue",
-                        visible: false,
+                        visible: true,
                         axisYIndex: 0,
                         showInLegend: true,
                         dataPoints: data_low
                     },                    
                     {
                         type: "line",
-                        name: "High",
-                        color: "#7F6084",
+                        name: get_text("high", "High"),
+                        color: "red",
                         axisYIndex: 0,
-                        visible: false,
+                        visible: true,
                         showInLegend: true,
                         dataPoints: data_high
                     },                    
                     {
                         type: "line",
-                        name: "Average",
-                        color: "black",
+                        name: get_text("average", "Average"),
+                        color: "green",
                         axisYIndex: 0,
                         showInLegend: true,
                         dataPoints: data_mid

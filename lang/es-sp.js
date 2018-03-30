@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_spanish = {
+        'open': 'Precio de apertura',
+        'close': 'Precio cerrado',
+        'high': 'Precio alto',
+        'low': 'Precio bajo',
+        'average': 'Precio promedio',        
         'exchange_center': 'Centro de intercambio',
         'cryptocurrency': 'Criptomoneda',
         'volume24h': 'Volumen de 24 horas',

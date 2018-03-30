@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_polish = {
+	'open': 'Cena otwarta',
+	'close': 'Zamknij cenę',
+	'high': 'Wysoka cena',
+	'low': 'Niska cena',
+	'average': 'Średnia cena',	
 	'exchange_center': 'Centrum wymiany',
 	'cryptocurrency': 'Kryptowaluta',
 	'volume24h': '24-godzinna objętość',

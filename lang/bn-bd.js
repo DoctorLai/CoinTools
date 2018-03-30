@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_bengali = {
+	'open': 'খোলা দাম',
+	'close': 'মূল্য বন্ধ করুন',
+	'high': 'উচ্চ মূল্য',
+	'low': 'কম মূল্য',
+	'average': 'গড় মূল্য',	
 	'exchange_center': 'এক্সচেঞ্জ কেন্দ্র',
 	'cryptocurrency': 'ভার্চুয়াল মুদ্রা',
 	'volume24h': '24 ঘন্টা ভলিউম',

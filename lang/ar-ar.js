@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_arabic = {	
+	'open': 'سعر الفتح',
+	'close': 'إغلاق السعر',
+	'high': 'غالي السعر',
+	'low': 'سعر منخفض',
+	'average': 'متوسط السعر',	
 	'exchange_center': 'مركز التبادل',
 	'cryptocurrency': 'عملة معماة',
 	'volume24h': 'حجم 24 ساعة',

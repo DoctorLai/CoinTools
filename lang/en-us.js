@@ -1,6 +1,11 @@
 'use strict';
 
 let translation_english = {
+	'open': 'Open',
+	'close': 'Close',
+	'high': 'High',
+	'low': 'Low',
+	'average': 'Average',
 	'exchange_center': 'Exchange',
 	'cryptocurrency': 'Cryptocurrency',
 	'volume24h': '24 Hour Volume',
