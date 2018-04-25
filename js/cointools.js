@@ -280,15 +280,52 @@ const getRankingTable = (currency, dom, keyword = "", limit = 300) => {
     }); 
 }
 
+// getting conversion from cryptocompare
+const getPriceCC = (a, b) => {
+    a = a.toUpperCase();
+    b = b.toUpperCase();
+    let api = "https://min-api.cryptocompare.com/data/price?fsym=" + a + "&tsyms=" + b;
+    return new Promise((resolve, reject) => {
+        fetch(api, {mode: 'cors'})
+        .then(validateResponse)
+        .then(readResponseAsJSON)
+        .then(function(result) {
+            if (result[b]) {
+                resolve(result[b]);
+            } else {
+                reject("invalid pairs: " + a + ", " + b);
+            }
+        }).catch(function(error) {
+            logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
+            reject(error);
+        });
+    });    
+}
+
 // ajax calling API to return the price of USD for coin
 const getPriceOfUSD = (coin) => {
     return new Promise((resolve, reject) => {
         let api = "https://api.coinmarketcap.com/v1/ticker/" + coin + '/';
-        fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
-            resolve(result[0].price_usd);
+        fetch(api, {mode: 'cors'})
+        .then(validateResponse)
+        .then(readResponseAsJSON)
+        .then(function(result) {
+            if (result[0].price_usd) {
+                resolve(result[0].price_usd);
+            } else {
+                getPriceCC(coin, 'USD').then((res) => {
+                    resolve(res);
+                }).catch(function(error) {
+                    reject(error);
+                });
+            }
         }).catch(function(error) {
-            logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
-            reject(error);
+            getPriceCC(coin, 'USD').then((res) => {
+                resolve(res);
+            }).catch(function(error) {
+                logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
+                reject(error);
+            });            
         });
     });
 }
@@ -297,11 +334,27 @@ const getPriceOfUSD = (coin) => {
 const getPriceOf1BTC = (currency) => {
     return new Promise((resolve, reject) => {
         let api = "https://api.coinmarketcap.com/v1/ticker/bitcoin/?convert=" + currency.toUpperCase();
-        fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {            
-            resolve(result[0]['price_' + currency.toLowerCase()]);
+        fetch(api, {mode: 'cors'})
+        .then(validateResponse)
+        .then(readResponseAsJSON)
+        .then(function(result) {            
+            let key = 'price_' + currency.toLowerCase();
+            if (result[0][key]) {
+                resolve(result[0][key]);
+            } else {
+                getPriceCC('BTC', currency).then((res) => {
+                    resolve(res);
+                }).catch(function(error) {
+                    reject(error);
+                });                
+            }
         }).catch(function(error) {
-            logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
-            reject(error);
+            getPriceCC('BTC', currency).then((res) => {
+                resolve(res);
+            }).catch(function(error) {
+                logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
+                reject(error);
+            });   
         });
     });
 }
@@ -310,11 +363,27 @@ const getPriceOf1BTC = (currency) => {
 const getPriceOf = (coin, fiat) => {
     return new Promise((resolve, reject) => {
         let api = "https://api.coinmarketcap.com/v1/ticker/" + coin + '/?convert=' + fiat.toUpperCase();
-        fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
-            resolve(result[0]['price_' + fiat.toLowerCase()]);
+        fetch(api, {mode: 'cors'})
+        .then(validateResponse)
+        .then(readResponseAsJSON)
+        .then(function(result) {
+            let key = 'price_' + fiat.toLowerCase();
+            if (result[0][key]) {
+                resolve(result[0][key]);
+            } else {
+                getPriceCC(coin, fiat).then((res) => {
+                    resolve(res);
+                }).catch(function(error) {
+                    reject(error);
+                });                
+            }            
         }).catch(function(error) {
-            logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
-            reject(error);
+            getPriceCC(coin, fiat).then((res) => {
+                resolve(res);
+            }).catch(function(error) {
+                logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
+                reject(error);
+            });              
         });
     });
 }
@@ -323,12 +392,28 @@ const getPriceOf = (coin, fiat) => {
 const getPriceOf_Coinbase_Fiat = (a, b) => {
     return new Promise((resolve, reject) => {
         let api = 'https://api.coinbase.com/v2/exchange-rates/?currency=' + a.toUpperCase();
-        fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
+        fetch(api, {mode: 'cors'})
+        .then(validateResponse)
+        .then(readResponseAsJSON)
+        .then(function(result) {
             let data = result.data.rates;
-            resolve(data[b.toUpperCase()]);
+            let key = b.toUpperCase();
+            if (data[key]) {
+                resolve(data[key]);
+            } else {
+                getPriceCC(a, b).then((res) => {
+                    resolve(res);
+                }).catch(function(error) {
+                    reject(error);
+                });                
+            }                     
         }).catch(function(error) {
-            logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
-            reject(error);
+            getPriceCC(a, b).then((res) => {
+                resolve(res);
+            }).catch(function(error) {
+                logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
+                reject(error);
+            });  
         });
     });
 }
@@ -468,11 +553,39 @@ const processConversion = (s, local_currency = '') => {
                 }                             
                 // if it is a fiat currency
                 if (isFiat(a)) {
-                    let api = 'https://api.coinbase.com/v2/exchange-rates/?currency=' + a.toUpperCase();
-                    fetch(api, {mode: 'cors'}).then(validateResponse).then(readResponseAsJSON).then(function(result) {
-                        $('textarea#convert_result').append(getFiatReport(result, a, currency));
+                    let key = a.toUpperCase();
+                    let api = 'https://api.coinbase.com/v2/exchange-rates/?currency=' + key;
+                    fetch(api, {mode: 'cors'})
+                    .then(validateResponse)
+                    .then(readResponseAsJSON)
+                    .then(function(result) {
+                        if (result) {
+                            let dom = $('div#conversion_results');
+                            let dom_id = "convert" + random_id();
+                            dom.append('<div id="' + dom_id + '"> </div>');                            
+                            $('textarea#convert_result').append(getFiatReport(result, a, currency));
+                            $('div#' + dom_id).html("<h4>1 " + a + " = <span class=yellow>" + res + "</span> " + currency + "</h4>");
+                        } else {
+                            getPriceCC(key, currency).then((res) => {
+                                let dom = $('div#conversion_results');
+                                let dom_id = "convert" + random_id();
+                                dom.append('<div id="' + dom_id + '"> </div>');                                
+                                $('textarea#convert_result').append("1 " + key + " = " + res + " " + currency);
+                                $('div#' + dom_id).html("<h4>1 " + a + " = <span class=yellow>" + res + "</span> " + currency + "</h4>");
+                            }).catch(function(error) {
+                                logit(get_text("Error: " + key));
+                            });
+                        }
                     }).catch(function(error) {
-                        logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);                    
+                        getPriceCC(key, currency).then((res) => {
+                            let dom = $('div#conversion_results');
+                            let dom_id = "convert" + random_id();
+                            dom.append('<div id="' + dom_id + '"> </div>');
+                            $('textarea#convert_result').append("1 " + key + " = " + res + " " + currency);
+                            $('div#' + dom_id).html("<h4>1 " + a + " = <span class=yellow>" + res + "</span> " + currency + "</h4>");
+                        }).catch(function(error) {
+                            logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);                    
+                        });                        
                     }); 
                 } else if (isCoin(a)) {
                     let api = 'https://api.coinmarketcap.com/v1/ticker/' + a.toLowerCase() + '/';
