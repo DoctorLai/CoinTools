@@ -14,7 +14,7 @@ let handy_crypto_urls = {
 
 // create parent context menu item
 let parent = chrome.contextMenus.create({
-	title: "CoinTools - Crypto URLs",
+	title: "CoinTools (Alt + Q)",
 	contexts: ["page", "frame"]
 });
 
