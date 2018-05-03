@@ -283,7 +283,13 @@ const getRankingTable = (currency, dom, keyword = "", limit = 300) => {
 // getting conversion from cryptocompare
 const getPriceCC = (a, b) => {
     a = a.toUpperCase();
+    if (a == 'SBD') {
+        a = 'SBD*';
+    }
     b = b.toUpperCase();
+    if (b == 'SBD') {
+        b = 'SBD*';
+    }
     let api = "https://min-api.cryptocompare.com/data/price?fsym=" + a + "&tsyms=" + b;
     return new Promise((resolve, reject) => {
         fetch(api, {mode: 'cors'})
@@ -651,6 +657,12 @@ const getHistory = (a, b, dom, dom2) => {
     }
     limit = parseInt(limit);
     let api;
+    if (a == 'SBD') {
+        a = 'SBD*';
+    }
+    if (b == 'SBD') {
+        b = 'SBD*';
+    }    
     if (limit <= 3) {
         api = "https://min-api.cryptocompare.com/data/histominute?fsym=" + a + "&tsym=" + b + "&limit=" + (limit * 24 * 60) + "&e=CCCAGG";
     } else if (limit <= 7) {
@@ -775,6 +787,9 @@ const getPairs = (a, dom, dom2) => {
     // if not valid pairs are given, then quit
     if (!isCoin(a)) {
         return;
+    }
+    if (a == 'SBD') {
+        a = 'SBD*';
     }
     let api = "https://min-api.cryptocompare.com/data/top/pairs?fsym=" + a + "&limit=100";
     logit(get_text("calling", "calling") + " " + api);

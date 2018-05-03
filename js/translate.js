@@ -73,6 +73,7 @@ const get_lang = () => {
         case 'de-de': return (translation_german);
         case 'ro-ro': return (translation_romanian);
         case 'fl-ph': return (translation_filipino);
+        case 'fr-fr': return (translation_french);
     }	
 }
 

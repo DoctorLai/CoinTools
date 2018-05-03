@@ -1,7 +1,7 @@
 'use strict';
 
 let translation_french = {
-	'open': 'Prix d'ouverture',
+	'open': 'Prix d\'ouverture',
 	'close': 'Prix de clôture',
 	'high': 'Prix maximum',
 	'low': 'Prix minimum',
@@ -46,9 +46,9 @@ let translation_french = {
 	'change_24hr': 'Changement (24h)',
 	'change_7days': 'Changement (7 jours)',
 	'convert': 'Convertir',
-	'alert_save': 'Paramètres sauvegardés (Relancer l'extension pour appliquer les changements)',
+	'alert_save': 'Paramètres sauvegardés (Relancer l\'extension pour appliquer les changements)',
 	'text_cryptocurrency_ranking_table': 'Tableau de classement des cryptomonnaies',
-	'ui_language': 'Language de l'interface',
+	'ui_language': 'Language de l\'interface',
 	'local_currency': 'Monnaie locale',
 	'save': 'Enregistrer',
 	'general': 'Général',
