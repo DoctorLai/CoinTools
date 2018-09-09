@@ -63,7 +63,20 @@
       </div>        
       <div id="tabs-rank">
         <h4 id="text_cryptocurrency_ranking_table">Cryptocurrency Ranking Table</h4>
-        <input type='text' id='ranking_search_id' class="form-control" placeholder="e.g. BTC">
+        <form class='form-inline'>
+          <input type='text' id='ranking_search_id' class="form-control" placeholder="e.g. BTC" style='width:600px'>
+          <input type=text list='num_per_page' class="form-control" style='width:100px' id="ranking_limit">
+          <datalist id='num_per_page'>
+            <option value=1>100</option>
+            <option value=200>200</option>
+            <option value=300>300</option>
+            <option value=500>500</option>
+            <option value=1000>1000</option>
+            <option value=2000>2000</option>
+            <option value=3000>3000</option>
+            <option value=999999>999999</option>
+          </datalist>        
+        </form>
         <div id="rank_div"> </div>
       </div>   
       <div id="tabs-chart">

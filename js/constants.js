@@ -9,3 +9,6 @@ const isFiat = (x, arr) => {
 	arr = arr || currency_array;
 	return arr.includes(x.toUpperCase());
 }
+
+// default ranking limit
+const default_ranking_limit = 300;

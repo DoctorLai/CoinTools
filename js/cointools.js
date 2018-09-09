@@ -19,6 +19,7 @@ const saveSettings = (msgbox = true) => {
     settings['history_limit'] = $('input#history_limit').val();
     settings['pairs_id'] = $('input#pairs_id').val();
     settings['ranking_search'] = $('input#ranking_search_id').val();
+    settings['ranking_limit'] = $('input#ranking_limit').val();
     chrome.storage.sync.set({ 
         cointools: settings
     }, function() {
@@ -138,13 +139,16 @@ const getGeneralData = (currency, dom) => {
 }
 
 // get ranking table from coinmarketcap
-const getRankingTable = (currency, dom, keyword = "", limit = 300) => {
+const getRankingTable = (currency, dom, keyword = "", limit = default_ranking_limit) => {
     let currency_upper = currency.toUpperCase();
     let currency_lower = currency.toLowerCase();
     keyword = keyword.trim().toLowerCase();
     if (keyword.length > 0) {
         // search a coin
         limit = 99999; 
+    }
+    if (limit <= 0) {
+        limit = default_ranking_limit;
     }
     let api = "https://api.coinmarketcap.com/v1/ticker/?limit=" + limit;
     if (currency != '') {
@@ -874,6 +878,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let currency = settings['currency'];
             let lang = settings['lang'];
             let conversion = settings['conversion'];
+            let ranking_limit = settings['ranking_limit'] || default_ranking_limit;
             $("select#currency").val(currency);
             $("select#lang").val(lang);
             $("textarea#conversion").val(conversion);
@@ -884,9 +889,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $("input#convert_to_history").val(settings['convert_to_history']);
             $("input#pairs_id").val(settings['pairs_id']);
             $("input#ranking_search_id").val(settings['ranking_search']);
-            if (settings['ranking_search']) {
-                getRankingTable("", $('div#rank_div'), $("input#ranking_search_id").val());
-            }
+            $('input#ranking_limit').val(ranking_limit);
             if (settings['history_limit']) {
                 $("input#history_limit").val(settings['history_limit']);
             } else {
@@ -896,15 +899,21 @@ document.addEventListener('DOMContentLoaded', function() {
             //general - api https://api.coinmarketcap.com/v1/global/
             getGeneralData(currency, $('div#general_div'));
             // ranking tables - api https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=2000
-            getRankingTable(currency, $('div#rank_div'));
+            if (settings['ranking_search']) {
+                getRankingTable("", $('div#rank_div'), $("input#ranking_search_id").val(), ranking_limit);
+            } else {
+                getRankingTable(currency, $('div#rank_div'), "", ranking_limit);
+            }
         } else {
             // first time set default parameters
             // general - api https://api.coinmarketcap.com/v1/global/
             getGeneralData("", $('div#general_div'));
             // ranking tables - api https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=2000
-            getRankingTable("", $('div#rank_div'));            
+            getRankingTable("", $('div#rank_div'), "", $("input#ranking_limit").val());            
             // default conversion
             processConversion($('textarea#conversion').val());
+            // ranking_limit
+            $('input#ranking_limit').val(default_ranking_limit);
         }
         // about
         let manifest = chrome.runtime.getManifest();    
@@ -1007,6 +1016,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // search while you type
     $('input#ranking_search_id').on("keyup", function() {
         saveSettings(false);
-        getRankingTable("", $('div#rank_div'), this.value);
+        getRankingTable("", $('div#rank_div'), this.value, $('input#ranking_limit').val());
     });
+    // save ranking_limit
+    $('input#ranking_limit').change(function() {
+        saveSettings(false);
+        getRankingTable("", $('div#rank_div'), $("input#ranking_search_id").val(), $('input#ranking_limit').val());
+    })
 }, false);
