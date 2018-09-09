@@ -214,12 +214,22 @@ const getRankingTable = (currency, dom, keyword = "", limit = default_ranking_li
             let total = 0;
             // 24 hour vol
             let total_24 = 0;
-            let data_24 = [];
+            let data_24 = []; 
+            // total_supply
+            let data_total_supply = [];
+            let total_supply = 0;
+            // circulating supply
+            let data_circulating_supply = [];
+            let total_circulating_supply = 0;
             for (let i = 0; i < Math.min(15, result.length); i ++) {
                 data.push({'coin': result[i]['name'], 'market_cap_usd': result[i]['market_cap_usd']});
                 data_24.push({'coin': result[i]['name'], '24h_volume_usd': result[i]['24h_volume_usd']});
-                total += parseInt(result[i]['market_cap_usd']);
+                data_total_supply.push({'coin': result[i]['name'], 'total_supply': result[i]['total_supply']});
+                data_circulating_supply.push({'coin': result[i]['name'], 'circulating_supply': result[i]['available_supply']});
+                total += parseInt(result[i]['market_cap_usd']);                
                 total_24 += parseInt(result[i]['24h_volume_usd']);
+                total_supply += parseInt(result[i]['total_supply']);
+                total_circulating_supply += parseInt(result[i]['available_supply']);
             }
             api = "https://api.coinmarketcap.com/v1/global/";
             $.ajax({
@@ -259,7 +269,35 @@ const getRankingTable = (currency, dom, keyword = "", limit = default_ranking_li
                         "export": {
                           "enabled": false
                         }
-                    });                                       
+                    });  
+                    let chart_total_supply = AmCharts.makeChart( "chart_div_total_supply", {
+                        "type": "pie",
+                        "theme": "light",
+                        "dataProvider": data_total_supply,
+                        "startDuration": 0,
+                        "valueField": "total_supply",
+                        "titleField": "coin",
+                        "balloon":{
+                          "fixedPosition": true
+                        },
+                        "export": {
+                          "enabled": false
+                        }
+                    }); 
+                    let chart_circulate_supply = AmCharts.makeChart( "chart_div_circulating_supply", {
+                        "type": "pie",
+                        "theme": "light",
+                        "dataProvider": data_circulating_supply,
+                        "startDuration": 0,
+                        "valueField": "circulating_supply",
+                        "titleField": "coin",
+                        "balloon":{
+                          "fixedPosition": true
+                        },
+                        "export": {
+                          "enabled": false
+                        }
+                    });                                                                              
                 },
                 error: function(request, status, error) {
                     logit(get_text('response', 'Response') + ': ' + request.responseText);
