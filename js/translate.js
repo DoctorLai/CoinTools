@@ -50,7 +50,9 @@ const translation = (lang) => {
     translate_text($('option#source_type'), lang, 'source_type');
     translate_text($('option#target_type'), lang, 'target_type');
     translate_text($('option#source_type_crypto'), lang, 'source_type_crypto');
-    translate_text($('option#target_type_crypto'), lang, 'target_type_crypto');    
+    translate_text($('option#target_type_crypto'), lang, 'target_type_crypto');
+    translate_text($('h4#text_total_supply'), lang, 'total_supply');
+    translate_text($('h4#text_circulating_supply'), lang, 'available_supply');
     translate_placeholder_text($('input#amount'), lang, 'amount');
 }
 

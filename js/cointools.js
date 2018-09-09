@@ -19,6 +19,7 @@ const saveSettings = (msgbox = true) => {
     settings['history_limit'] = $('input#history_limit').val();
     settings['pairs_id'] = $('input#pairs_id').val();
     settings['ranking_search'] = $('input#ranking_search_id').val();
+    settings['ranking_limit'] = $('input#ranking_limit').val();
     chrome.storage.sync.set({ 
         cointools: settings
     }, function() {
@@ -138,13 +139,16 @@ const getGeneralData = (currency, dom) => {
 }
 
 // get ranking table from coinmarketcap
-const getRankingTable = (currency, dom, keyword = "", limit = 300) => {
+const getRankingTable = (currency, dom, keyword = "", limit = default_ranking_limit) => {
     let currency_upper = currency.toUpperCase();
     let currency_lower = currency.toLowerCase();
     keyword = keyword.trim().toLowerCase();
     if (keyword.length > 0) {
         // search a coin
         limit = 99999; 
+    }
+    if (limit <= 0) {
+        limit = default_ranking_limit;
     }
     let api = "https://api.coinmarketcap.com/v1/ticker/?limit=" + limit;
     if (currency != '') {
@@ -210,12 +214,22 @@ const getRankingTable = (currency, dom, keyword = "", limit = 300) => {
             let total = 0;
             // 24 hour vol
             let total_24 = 0;
-            let data_24 = [];
+            let data_24 = []; 
+            // total_supply
+            let data_total_supply = [];
+            let total_supply = 0;
+            // circulating supply
+            let data_circulating_supply = [];
+            let total_circulating_supply = 0;
             for (let i = 0; i < Math.min(15, result.length); i ++) {
                 data.push({'coin': result[i]['name'], 'market_cap_usd': result[i]['market_cap_usd']});
                 data_24.push({'coin': result[i]['name'], '24h_volume_usd': result[i]['24h_volume_usd']});
-                total += parseInt(result[i]['market_cap_usd']);
+                data_total_supply.push({'coin': result[i]['name'], 'total_supply': result[i]['total_supply']});
+                data_circulating_supply.push({'coin': result[i]['name'], 'circulating_supply': result[i]['available_supply']});
+                total += parseInt(result[i]['market_cap_usd']);                
                 total_24 += parseInt(result[i]['24h_volume_usd']);
+                total_supply += parseInt(result[i]['total_supply']);
+                total_circulating_supply += parseInt(result[i]['available_supply']);
             }
             api = "https://api.coinmarketcap.com/v1/global/";
             $.ajax({
@@ -255,7 +269,35 @@ const getRankingTable = (currency, dom, keyword = "", limit = 300) => {
                         "export": {
                           "enabled": false
                         }
-                    });                                       
+                    });  
+                    let chart_total_supply = AmCharts.makeChart( "chart_div_total_supply", {
+                        "type": "pie",
+                        "theme": "light",
+                        "dataProvider": data_total_supply,
+                        "startDuration": 0,
+                        "valueField": "total_supply",
+                        "titleField": "coin",
+                        "balloon":{
+                          "fixedPosition": true
+                        },
+                        "export": {
+                          "enabled": false
+                        }
+                    }); 
+                    let chart_circulate_supply = AmCharts.makeChart( "chart_div_circulating_supply", {
+                        "type": "pie",
+                        "theme": "light",
+                        "dataProvider": data_circulating_supply,
+                        "startDuration": 0,
+                        "valueField": "circulating_supply",
+                        "titleField": "coin",
+                        "balloon":{
+                          "fixedPosition": true
+                        },
+                        "export": {
+                          "enabled": false
+                        }
+                    });                                                                              
                 },
                 error: function(request, status, error) {
                     logit(get_text('response', 'Response') + ': ' + request.responseText);
@@ -874,6 +916,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let currency = settings['currency'];
             let lang = settings['lang'];
             let conversion = settings['conversion'];
+            let ranking_limit = settings['ranking_limit'] || default_ranking_limit;
             $("select#currency").val(currency);
             $("select#lang").val(lang);
             $("textarea#conversion").val(conversion);
@@ -884,9 +927,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $("input#convert_to_history").val(settings['convert_to_history']);
             $("input#pairs_id").val(settings['pairs_id']);
             $("input#ranking_search_id").val(settings['ranking_search']);
-            if (settings['ranking_search']) {
-                getRankingTable("", $('div#rank_div'), $("input#ranking_search_id").val());
-            }
+            $('input#ranking_limit').val(ranking_limit);
             if (settings['history_limit']) {
                 $("input#history_limit").val(settings['history_limit']);
             } else {
@@ -896,15 +937,21 @@ document.addEventListener('DOMContentLoaded', function() {
             //general - api https://api.coinmarketcap.com/v1/global/
             getGeneralData(currency, $('div#general_div'));
             // ranking tables - api https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=2000
-            getRankingTable(currency, $('div#rank_div'));
+            if (settings['ranking_search']) {
+                getRankingTable("", $('div#rank_div'), $("input#ranking_search_id").val(), ranking_limit);
+            } else {
+                getRankingTable(currency, $('div#rank_div'), "", ranking_limit);
+            }
         } else {
             // first time set default parameters
             // general - api https://api.coinmarketcap.com/v1/global/
             getGeneralData("", $('div#general_div'));
             // ranking tables - api https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=2000
-            getRankingTable("", $('div#rank_div'));            
+            getRankingTable("", $('div#rank_div'), "", $("input#ranking_limit").val());            
             // default conversion
             processConversion($('textarea#conversion').val());
+            // ranking_limit
+            $('input#ranking_limit').val(default_ranking_limit);
         }
         // about
         let manifest = chrome.runtime.getManifest();    
@@ -1007,6 +1054,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // search while you type
     $('input#ranking_search_id').on("keyup", function() {
         saveSettings(false);
-        getRankingTable("", $('div#rank_div'), this.value);
+        getRankingTable("", $('div#rank_div'), this.value, $('input#ranking_limit').val());
     });
+    // save ranking_limit
+    $('input#ranking_limit').change(function() {
+        saveSettings(false);
+        getRankingTable("", $('div#rank_div'), $("input#ranking_search_id").val(), $('input#ranking_limit').val());
+    })
 }, false);
