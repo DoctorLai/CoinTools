@@ -351,6 +351,26 @@ const getPriceCC = (a, b) => {
 }
 
 // ajax calling API to return the price of USD for coin
+const getPriceOfUSD_UsingCoinPaprika = (coin) => {
+    return new Promise((resolve, reject) => {
+        // TODO: try different coin ID
+        let api = "https://api.coinpaprika.com/v1/ticker/" + coin;
+        fetch(api, {mode: 'cors'})
+        .then(validateResponse)
+        .then(readResponseAsJSON)
+        .then(function(result) {
+            if (result.price_usd) {
+                resolve(result.price_usd);
+            } else {
+                reject("error");
+            }
+        }).catch(function(error) {
+            reject(error);
+        });
+    });
+}
+
+// ajax calling API to return the price of USD for coin
 const getPriceOfUSD = (coin) => {
     return new Promise((resolve, reject) => {
         let api = "https://api.coinmarketcap.com/v1/ticker/" + coin + '/';
@@ -371,8 +391,14 @@ const getPriceOfUSD = (coin) => {
             getPriceCC(coin, 'USD').then((res) => {
                 resolve(res);
             }).catch(function(error) {
-                logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
-                reject(error);
+                // try coinpaparika as last resort.
+                getPriceOfUSD_UsingCoinPaprika(coin).then((res) => {
+                    resolve(res);
+                }).catch(function(error) {
+                    // there is nothing we can do further
+                    logit(get_text("request_failed", "Request failed") + ': ' + api + ": " + error);
+                    reject(error);
+                });
             });            
         });
     });
