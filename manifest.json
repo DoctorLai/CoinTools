@@ -40,9 +40,7 @@
       "run_at":"document_start"
   }],
   "permissions": [
-     "activeTab",
      "storage",
-     "tabs",
      "contextMenus",
      "<all_urls>"
   ]
