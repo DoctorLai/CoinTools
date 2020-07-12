@@ -16,6 +16,7 @@
 let coinmarkcap = {};
 coinmarkcap['BTC'] = 'bitcoin';
 coinmarkcap['ETH'] = 'ethereum';
+coinmarkcap['HIVE'] = 'hive';
 coinmarkcap['XRP'] = 'ripple';
 coinmarkcap['BCH'] = 'bitcoin-cash';
 coinmarkcap['LTC'] = 'litecoin';

@@ -52,7 +52,7 @@
 	
 	// Alt + Q
 	$(document).keydown(function(e) {
-	    if (e && (e.key.toLowerCase() == "q") && e.altKey) {
+	    if (e && (e.key) && (e.key.toLowerCase() == "q") && e.altKey) {
 	    	let s = prompt("(Cryptocompare) e.g. BTC STEEM, 10 BTC SBD, BTC 10 SBD", "");
 	    	if (s != null) {
 	    		s = s.trim();

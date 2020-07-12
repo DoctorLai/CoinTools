@@ -373,13 +373,14 @@ const getPriceOfUSD_UsingCoinPaprika = (coin) => {
 // ajax calling API to return the price of USD for coin
 const getPriceOfUSD = (coin) => {
     return new Promise((resolve, reject) => {
-        let api = "https://api.coinmarketcap.com/v1/ticker/" + coin + '/';
+        coin = coin.toLowerCase();
+        let api = "https://api.coingecko.com/api/v3/simple/price?ids=" + coin + "&vs_currencies=usd";
         fetch(api, {mode: 'cors'})
         .then(validateResponse)
         .then(readResponseAsJSON)
         .then(function(result) {
-            if (result[0].price_usd) {
-                resolve(result[0].price_usd);
+            if (result[coin] && result[coin]["usd"]) {
+                resolve(result[coin]["usd"]);
             } else {
                 getPriceCC(coin, 'USD').then((res) => {
                     resolve(res);
@@ -407,14 +408,13 @@ const getPriceOfUSD = (coin) => {
 // ajax calling API to return the price of currency for 1 BTC
 const getPriceOf1BTC = (currency) => {
     return new Promise((resolve, reject) => {
-        let api = "https://api.coinmarketcap.com/v1/ticker/bitcoin/?convert=" + currency.toUpperCase();
+        let api = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=" + currency.toUpperCase();
         fetch(api, {mode: 'cors'})
         .then(validateResponse)
         .then(readResponseAsJSON)
         .then(function(result) {            
-            let key = 'price_' + currency.toLowerCase();
-            if (result[0][key]) {
-                resolve(result[0][key]);
+            if (result["bitcoin"] && result["bitcoin"][currency.toLowerCase]) {
+                resolve(result["bitcoin"][currency.toLowerCase]);
             } else {
                 getPriceCC('BTC', currency).then((res) => {
                     resolve(res);
@@ -436,14 +436,14 @@ const getPriceOf1BTC = (currency) => {
 // ajax calling API to return the price of USD for coin
 const getPriceOf = (coin, fiat) => {
     return new Promise((resolve, reject) => {
-        let api = "https://api.coinmarketcap.com/v1/ticker/" + coin + '/?convert=' + fiat.toUpperCase();
+        coin = coin.toLowerCase();
+        let api = "https://api.coingecko.com/api/v3/simple/price?ids=" + coin + "&vs_currencies=" + fiat.toUpperCase();
         fetch(api, {mode: 'cors'})
         .then(validateResponse)
         .then(readResponseAsJSON)
         .then(function(result) {
-            let key = 'price_' + fiat.toLowerCase();
-            if (result[0][key]) {
-                resolve(result[0][key]);
+            if (result[coin] && result[coin][fiat.toLowerCase]) {
+                resolve(result[coin][fiat.toLowerCase]);
             } else {
                 getPriceCC(coin, fiat).then((res) => {
                     resolve(res);
@@ -960,7 +960,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 $("input#history_limit").val("30");
             }
             processConversion(conversion, currency);
-            //general - api https://api.coinmarketcap.com/v1/global/
             getGeneralData(currency, $('div#general_div'));
             // ranking tables - api https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=2000
             if (settings['ranking_search']) {
@@ -970,9 +969,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else {
             // first time set default parameters
-            // general - api https://api.coinmarketcap.com/v1/global/
             getGeneralData("", $('div#general_div'));
-            // ranking tables - api https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=2000
             getRankingTable("", $('div#rank_div'), "", $("input#ranking_limit").val());            
             // default conversion
             processConversion($('textarea#conversion').val());
@@ -988,7 +985,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // credits
         about += "\n" + "API Credit: https://min-api.cryptocompare.com/";
         about += "\n" + "API Credit: https://www.coinbase.com/join/59f21412b8770300d98bd9a5";
-        about += "\n" + "API Credit: https://coinmarketcap.com/api/\n";
+        about += "\n" + "API Credit: https://api.coingecko.com/api/v3/\n";
         // render
         $('textarea#about').val(about);
         // translate
